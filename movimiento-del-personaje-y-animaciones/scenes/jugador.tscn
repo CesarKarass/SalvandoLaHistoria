@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/jugador.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://assets/jugador_sprites.tres" id="2_sprites"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
+size = Vector2(30, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interaccion"]
+size = Vector2(64, 64)
+
+[node name="Jugador" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_script")
+
+[node name="Sombra" type="Polygon2D" parent="."]
+color = Color(0, 0, 0, 0.28)
+polygon = PackedVector2Array(-15, 17, 15, 17, 15, 26, -15, 26)
+
+[node name="SpriteJugador" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -8)
+sprite_frames = ExtResource("2_sprites")
+autoplay = &"idle_down"
+texture_filter = 1
+
+[node name="HitboxFisica" type="CollisionShape2D" parent="."]
+position = Vector2(0, 13)
+shape = SubResource("RectangleShape2D_hitbox")
+
+[node name="Camara" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="Interaccion" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="Forma" type="CollisionShape2D" parent="Interaccion"]
+shape = SubResource("RectangleShape2D_interaccion")

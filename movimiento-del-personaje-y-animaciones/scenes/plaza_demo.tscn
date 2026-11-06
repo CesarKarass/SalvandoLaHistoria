@@ -1,0 +1,112 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/escenario.gd" id="1_escenario"]
+[ext_resource type="PackedScene" path="res://scenes/jugador.tscn" id="2_jugador"]
+[ext_resource type="PackedScene" path="res://scenes/joystick.tscn" id="3_joystick"]
+[ext_resource type="Script" path="res://scripts/zona_interaccion.gd" id="4_zona"]
+[ext_resource type="Script" path="res://scripts/boton_accion.gd" id="5_boton"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_anomalia"]
+radius = 48.0
+
+[node name="PlazaDemo" type="Node2D"]
+script = ExtResource("1_escenario")
+plano = PackedStringArray("################", "#..............#", "#..BBB....BBB..#", "#..BBB....BBB..#", "#..BBB....BBB..#", "#..............#", "#......cc......#", "#.....c..c.....#", "#......cc......#", "#..............#", "#...b..b..b....#", "#..............#", "#....BBBBBB....#", "#....B....B....#", "#..............#", "################")
+
+[node name="Piso" type="ColorRect" parent="."]
+offset_right = 1024.0
+offset_bottom = 1024.0
+color = Color(0.827, 0.784, 0.706, 1)
+mouse_filter = 2
+
+[node name="Decoracion" type="Node2D" parent="."]
+
+[node name="Bloques" type="Node2D" parent="."]
+
+[node name="AnomaliaTemporal" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+position = Vector2(544, 744)
+script = ExtResource("4_zona")
+mensaje = "Anomalía temporal: mapa enrollado. Pulsa E / ESPACIO para entrar a la historia."
+
+[node name="Forma" type="CollisionShape2D" parent="AnomaliaTemporal"]
+shape = SubResource("CircleShape2D_anomalia")
+
+[node name="Visual" type="Polygon2D" parent="AnomaliaTemporal"]
+color = Color(0.949, 0.627, 0.239, 0.85)
+polygon = PackedVector2Array(-34, 0, 0, -34, 34, 0, 0, 34)
+
+[node name="VisualInterno" type="Polygon2D" parent="AnomaliaTemporal"]
+color = Color(1, 0.91, 0.65, 0.95)
+polygon = PackedVector2Array(-14, 0, 0, -14, 14, 0, 0, 14)
+
+[node name="Jugador" parent="." instance=ExtResource("2_jugador")]
+position = Vector2(544, 928)
+
+[node name="Joystick" parent="." instance=ExtResource("3_joystick")]
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -208.0
+offset_right = 176.0
+offset_bottom = -64.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Aviso" type="Label" parent="HUD"]
+anchors_preset = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -340.0
+offset_top = 56.0
+offset_right = 340.0
+offset_bottom = 120.0
+theme_override_colors/font_color = Color(0.949, 0.627, 0.239, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = ""
+horizontal_alignment = 1
+
+[node name="Ayuda" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 1136.0
+offset_bottom = 44.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 16
+text = "WASD / Flechas: mover (8 dir.)    Shift: correr    ESPACIO: esquivar    E: interactuar    Joystick: táctil"
+
+[node name="BtnEsquivar" type="Button" parent="HUD"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -368.0
+offset_top = -104.0
+offset_right = -204.0
+offset_bottom = -32.0
+focus_mode = 0
+script = ExtResource("5_boton")
+accion = &"esquivar"
+theme_override_font_sizes/font_size = 18
+text = "ESQUIVAR"
+
+[node name="BtnInteractuar" type="Button" parent="HUD"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -188.0
+offset_top = -104.0
+offset_right = -24.0
+offset_bottom = -32.0
+focus_mode = 0
+script = ExtResource("5_boton")
+accion = &"interactuar"
+theme_override_font_sizes/font_size = 18
+text = "INTERACTUAR"

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/npc.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc_hidalgo.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="shape_body"]
+size = Vector2(30, 22)
+
+[node name="NPC" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1")
+dialogue_text = "¡Joven! Nadie cruza la plaza mientras el tiempo corre... corre como el reloj que nos robó el mapa."
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -11)
+shape = SubResource("shape_body")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -24)
+texture = ExtResource("2")

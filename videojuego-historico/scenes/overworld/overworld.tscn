@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/overworld/overworld.gd" id="1_ow"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="Script" path="res://scripts/events/event_entry.gd" id="3_entry"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="4_invui"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_entry"]
 radius = 24.0
@@ -29,3 +30,5 @@ spawn_id = "SpawnDefault"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Event1Entry"]
 shape = SubResource("CircleShape2D_entry")
+
+[node name="InventoryUI" parent="." instance=ExtResource("4_invui")]

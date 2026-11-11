@@ -52,6 +52,12 @@ func _on_interaction_area_exited(area: Area2D) -> void:
 	_nearby.erase(area)
 
 func _update_nearest() -> void:
+	# Limpia referencias a nodos liberados (ej. pickups recogidos).
+	for i in range(_nearby.size() - 1, -1, -1):
+		if not is_instance_valid(_nearby[i]):
+			_nearby.remove_at(i)
+	if _nearest != null and not is_instance_valid(_nearest):
+		_nearest = null
 	var best: Area2D = null
 	var best_d := INF
 	for n: Area2D in _nearby:

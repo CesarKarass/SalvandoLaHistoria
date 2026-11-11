@@ -36,7 +36,13 @@ func _run() -> void:
 	results.append("gano=" + str(probe2.won))
 	results.append("temporizador_detenido=" + str(probe2.time_remaining == t_before))
 
-	# --- 3) Evento 1: interactuar con el objetivo activa is_hidalgo_saved ---
+	# --- 3) Evento 1: con el ítem correcto seleccionado, ganar activa la bandera ---
+	var test_item := Item.new()
+	test_item.id = &"bolsa_monedas"
+	test_item.display_name = "Bolsa de monedas"
+	Inventory.clear()
+	Inventory.add_item(test_item)
+	Inventory.select(0)
 	var e1: Event1 = load("res://scenes/events/event1/event1.tscn").instantiate()
 	add_child(e1)
 	await get_tree().process_frame

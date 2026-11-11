@@ -15,16 +15,21 @@ func _ready() -> void:
 	_build()
 	visible = false
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not event.is_action_pressed("cancel"):
+func _process(_delta: float) -> void:
+	if not Input.is_action_just_pressed("cancel"):
 		return
-	get_viewport().set_input_as_handled()
 	if not visible:
 		open()
 	elif _options_node != null:
 		_close_options()
 	else:
 		close()
+
+func toggle() -> void:
+	if visible:
+		close()
+	else:
+		open()
 
 func _build() -> void:
 	_content = Control.new()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scenes/events/event1/event1.gd" id="1_e1"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" path="res://resources/items/bolsa_monedas.tres" id="8_bolsa"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="9_invui"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="10_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="11_touch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_target"]
 radius = 16.0
@@ -62,3 +63,5 @@ visible = false
 [node name="InventoryUI" parent="." instance=ExtResource("9_invui")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("10_pause")]
+
+[node name="TouchControls" parent="." instance=ExtResource("11_touch")]

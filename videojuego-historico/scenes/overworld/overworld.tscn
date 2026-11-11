@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/overworld/overworld.gd" id="1_ow"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="4_invui"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tile_building.png" id="5_building"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="6_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="7_touch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_entry"]
 radius = 48.0
@@ -48,3 +49,5 @@ text = "Evento 1 (entrar)"
 [node name="InventoryUI" parent="." instance=ExtResource("4_invui")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+
+[node name="TouchControls" parent="." instance=ExtResource("7_touch")]

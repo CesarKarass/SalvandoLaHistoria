@@ -100,6 +100,24 @@ func _build_ui() -> void:
 	_next_label.visible = false
 	_bg.add_child(_next_label)
 
+	# Captador de toques (encima): tocar en cualquier parte avanza el diálogo.
+	var catcher := Control.new()
+	catcher.set_anchors_preset(Control.PRESET_FULL_RECT)
+	catcher.mouse_filter = Control.MOUSE_FILTER_STOP
+	catcher.gui_input.connect(_on_catcher_input)
+	add_child(catcher)
+
+func _on_catcher_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	var pressed := false
+	if event is InputEventMouseButton:
+		pressed = event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+	elif event is InputEventScreenTouch:
+		pressed = event.pressed
+	if pressed:
+		DialogueManager.advance()
+
 func _anchor(c: Control, al: float, at: float, ar: float, ab: float, ol: float, ot: float, orr: float, ob: float) -> void:
 	c.anchor_left = al
 	c.anchor_top = at

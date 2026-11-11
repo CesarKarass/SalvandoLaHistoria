@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*res://autoload/game_manager.gd"
+UISkin="*res://autoload/ui_skin.gd"
+Settings="*res://autoload/settings.gd"
 DialogueManager="*res://autoload/dialogue_manager.gd"
 Inventory="*res://autoload/inventory.gd"
 SceneTransition="*res://autoload/scene_transition.gd"

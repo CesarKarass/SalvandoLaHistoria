@@ -41,7 +41,7 @@ func _run() -> void:
 	results.append("theme_slot=" + str(th.has_stylebox("panel", "Slot")))
 
 	# --- 2) Menú de inicio: botones Jugar/Opciones/Salir ---
-	var menu: Control = (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate() as Control
+	var menu: CanvasLayer = (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate() as CanvasLayer
 	add_child(menu)
 	await get_tree().process_frame
 	var menu_buttons: Array[String] = []

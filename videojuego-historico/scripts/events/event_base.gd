@@ -10,7 +10,7 @@ signal event_lost
 signal time_updated(remaining: float)
 
 @export var event_id: String = ""
-@export var time_limit: float = 10.0
+@export var time_limit: float = 50.0
 
 var time_remaining: float = 0.0
 var is_active: bool = false

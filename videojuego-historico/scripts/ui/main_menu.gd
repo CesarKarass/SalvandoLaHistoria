@@ -1,11 +1,10 @@
-extends Control
+extends CanvasLayer
 ## Menú de inicio: título + Jugar / Opciones / Salir.
 
 const OVERWORLD := "res://scenes/overworld/overworld.tscn"
 const OPTIONS := "res://scenes/ui/options_menu.tscn"
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build()
 
 func _build() -> void:
@@ -28,7 +27,6 @@ func _build() -> void:
 	add_child(center)
 
 	var col := UISkin.vbox(16)
-	col.alignment = BoxContainer.ALIGNMENT_CENTER
 	center.add_child(col)
 
 	if UISkin.data != null and UISkin.data.logo != null:

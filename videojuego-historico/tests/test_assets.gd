@@ -35,6 +35,17 @@ func _run() -> void:
 	var npc_sprite := npc.get_node("Sprite2D") as Sprite2D
 	results.append("npc_sprite_ok=" + str(npc_sprite.texture != null))
 
+	# Sala del overworld: tiles + colisiones de muros.
+	var ow: Node2D = (load("res://scenes/overworld/overworld.tscn") as PackedScene).instantiate() as Node2D
+	add_child(ow)
+	await get_tree().process_frame
+	var room := ow.get_node_or_null("Room") as TileMapLayer
+	var cells := 0
+	if room != null:
+		cells = room.get_used_cells().size()
+	results.append("overworld_room_cells=" + str(cells))
+	results.append("overworld_wall_colliders=" + str(ow.get_node_or_null("WallColliders") != null))
+
 	for line: String in results:
 		print("TEST: ", line)
 	print("TEST_DONE")

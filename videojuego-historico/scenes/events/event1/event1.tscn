@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="9_invui"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_target"]
-radius = 14.0
+radius = 16.0
 
 [node name="Event1" type="Node2D"]
 script = ExtResource("1_e1")
@@ -19,21 +19,21 @@ script = ExtResource("1_e1")
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="SpawnDefault" type="Marker2D" parent="Spawns"]
-position = Vector2(50, 50)
+position = Vector2(640, 384)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(50, 50)
+position = Vector2(640, 384)
 
 [node name="Hidalgo" parent="." instance=ExtResource("3_npc")]
-position = Vector2(90, 50)
+position = Vector2(320, 384)
 dialogue = ExtResource("4_dlg")
 
 [node name="PickupBolsa" parent="." instance=ExtResource("7_pickup")]
-position = Vector2(130, 50)
+position = Vector2(640, 256)
 item = ExtResource("8_bolsa")
 
 [node name="Antagonista" type="Area2D" parent="."]
-position = Vector2(200, 120)
+position = Vector2(1000, 384)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
@@ -45,13 +45,13 @@ prompt_text = "Entregar"
 shape = SubResource("CircleShape2D_target")
 
 [node name="Sprite2D" type="Sprite2D" parent="Antagonista"]
-position = Vector2(0, -12)
+position = Vector2(0, -14)
 
 [node name="Prompt" type="Label" parent="Antagonista"]
 offset_left = -48.0
-offset_top = -48.0
+offset_top = -52.0
 offset_right = 48.0
-offset_bottom = -24.0
+offset_bottom = -28.0
 horizontal_alignment = 1
 text = "Entregar"
 visible = false

@@ -24,6 +24,4 @@ func set_prompt_visible(v: bool) -> void:
 	_prompt.visible = v
 
 func _build_placeholder_sprite() -> void:
-	var tex := PlaceholderTexture2D.new()
-	tex.size = Vector2(16, 16)
-	_sprite.texture = tex
+	_sprite.texture = PlaceholderArt.circle(12, Color(1.0, 0.85, 0.2))

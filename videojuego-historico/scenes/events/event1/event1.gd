@@ -1,20 +1,30 @@
-extends Node2D
-## Evento 1 (mapa de acción): coloca al jugador en el spawn indicado.
-## El temporizador, HUD y lógica del evento se añaden en la Fase 4.
+class_name Event1
+extends EventBase
+## Evento 1: "El Duelo en la Plaza de Dolores" (1810).
+## Victoria: interactuar con el objetivo "Antagonista" antes de que acabe el tiempo.
+## (En la Fase 5 se validará que el jugador porte el ítem correcto.)
 
 func _ready() -> void:
-	_place_player()
+	super._ready()
+	var target := get_node_or_null("Antagonista") as InteractTarget
+	if target != null:
+		target.activated.connect(_on_target_activated)
 
-func _place_player() -> void:
-	var player := get_tree().get_first_node_in_group("player")
-	if player == null:
-		return
-	var spawn_name: String = GameManager.pending_spawn
-	var marker: Marker2D = null
-	if spawn_name != "":
-		marker = get_node_or_null("Spawns/" + spawn_name) as Marker2D
-	if marker == null:
-		marker = get_node_or_null("Spawns/SpawnDefault") as Marker2D
-	if marker != null:
-		player.global_position = marker.global_position
-	GameManager.pending_spawn = ""
+func _on_target_activated() -> void:
+	win()
+
+func _on_win() -> void:
+	GameManager.set_flag("is_hidalgo_saved", true)
+	if _hud != null:
+		_hud.show_result("¡Victoria! Hidalgo está a salvo.")
+	_set_player_movable(false)
+	await get_tree().create_timer(1.2).timeout
+	SceneTransition.change_scene("res://scenes/overworld/overworld.tscn", "SpawnFromEvent1")
+
+func _on_lose() -> void:
+	GameManager.set_flag("is_hidalgo_saved", false)
+	if _hud != null:
+		_hud.show_result("Derrota... el tiempo se agotó.")
+	_set_player_movable(false)
+	await get_tree().create_timer(1.5).timeout
+	SceneTransition.change_scene("res://scenes/overworld/overworld.tscn", "SpawnFromEvent1")

@@ -1,0 +1,93 @@
+class_name PauseMenu
+extends CanvasLayer
+## Menú de pausa: se abre/cierra con Esc y pausa el árbol.
+
+const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
+const OPTIONS := "res://scenes/ui/options_menu.tscn"
+
+var _options_node: OptionsMenu = null
+
+func _ready() -> void:
+	layer = 40
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_build()
+	visible = false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_pressed("cancel"):
+		return
+	get_viewport().set_input_as_handled()
+	if not visible:
+		open()
+	elif _options_node != null:
+		_close_options()
+	else:
+		close()
+
+func _build() -> void:
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.6)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(dim)
+
+	var center := UISkin.center()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(center)
+
+	var panel := UISkin.panel("MenuPanel")
+	panel.custom_minimum_size = Vector2(340, 0)
+	center.add_child(panel)
+
+	var col := UISkin.vbox(12)
+	panel.add_child(col)
+
+	col.add_child(UISkin.title("Pausa"))
+	col.add_child(UISkin.spacer(8))
+
+	var resume := UISkin.primary_button("Continuar")
+	resume.custom_minimum_size = Vector2(240, 0)
+	resume.pressed.connect(close)
+	col.add_child(resume)
+
+	var options := UISkin.button("Opciones")
+	options.custom_minimum_size = Vector2(240, 0)
+	options.pressed.connect(_open_options)
+	col.add_child(options)
+
+	var menu := UISkin.button("Menú principal")
+	menu.custom_minimum_size = Vector2(240, 0)
+	menu.pressed.connect(_to_main_menu)
+	col.add_child(menu)
+
+	resume.grab_focus()
+
+func open() -> void:
+	visible = true
+	get_tree().paused = true
+
+func close() -> void:
+	visible = false
+	get_tree().paused = false
+	_close_options()
+
+func _open_options() -> void:
+	if _options_node != null:
+		return
+	var opts_scene: PackedScene = load(OPTIONS)
+	if opts_scene == null:
+		return
+	_options_node = opts_scene.instantiate() as OptionsMenu
+	_options_node.closed.connect(_on_options_closed)
+	add_child(_options_node)
+
+func _close_options() -> void:
+	if _options_node != null:
+		_options_node.queue_free()
+		_options_node = null
+
+func _on_options_closed() -> void:
+	_options_node = null
+
+func _to_main_menu() -> void:
+	close()
+	SceneTransition.change_scene(MAIN_MENU, "")

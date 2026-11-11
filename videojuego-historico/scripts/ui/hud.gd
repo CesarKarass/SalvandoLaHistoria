@@ -1,6 +1,6 @@
 class_name HUD
 extends CanvasLayer
-## HUD del evento: cuenta atrás y mensaje de resultado.
+## HUD del evento: cuenta atrás y mensaje de resultado (estilado por UISkin).
 
 var _time_label: Label
 var _result_label: Label
@@ -17,13 +17,11 @@ func show_result(text: String) -> void:
 	_result_label.visible = true
 
 func _build_ui() -> void:
-	_time_label = Label.new()
+	_time_label = UISkin.label("Tiempo: 0s", "HudLabel")
 	_time_label.position = Vector2(20, 16)
-	_time_label.add_theme_font_size_override("font_size", 26)
-	_time_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.55))
 	add_child(_time_label)
 
-	_result_label = Label.new()
+	_result_label = UISkin.label("", "TitleLabel")
 	_result_label.anchor_left = 0.0
 	_result_label.anchor_right = 1.0
 	_result_label.anchor_top = 0.32
@@ -31,6 +29,4 @@ func _build_ui() -> void:
 	_result_label.offset_top = -28.0
 	_result_label.offset_bottom = 28.0
 	_result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_result_label.add_theme_font_size_override("font_size", 40)
-	_result_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
 	add_child(_result_label)

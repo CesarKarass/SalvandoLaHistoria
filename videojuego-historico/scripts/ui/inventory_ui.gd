@@ -1,8 +1,7 @@
 class_name InventoryUI
 extends CanvasLayer
-## Inventario: hotbar (siempre visible, selección rápida) + panel abrible con
-## el botón "inventory". Refleja Inventory.selected_index y permite seleccionar
-## con las teclas 1–4 o haciendo clic/tap en un slot.
+## Inventario: hotbar (selección rápida) + panel abrible con "inventory".
+## Estilado por UISkin (slots "Slot"/"SlotSelected", panel "MenuPanel").
 
 const SLOT_PX := 44
 const COLUMNS := 4
@@ -51,7 +50,7 @@ func _build_hotbar() -> void:
 		_hot_slots.append(slot)
 
 func _build_panel() -> void:
-	_panel = Panel.new()
+	_panel = UISkin.panel("MenuPanel")
 	_panel.anchor_left = 0.5
 	_panel.anchor_right = 0.5
 	_panel.anchor_top = 0.5
@@ -63,10 +62,8 @@ func _build_panel() -> void:
 	_panel.visible = false
 	add_child(_panel)
 
-	var title := Label.new()
-	title.text = "Maletín"
+	var title := UISkin.subtitle("Maletín")
 	title.position = Vector2(18, 12)
-	title.add_theme_font_size_override("font_size", 22)
 	_panel.add_child(title)
 
 	var grid := GridContainer.new()
@@ -82,7 +79,7 @@ func _build_panel() -> void:
 		_grid_slots.append(slot)
 
 func _make_slot(px: int) -> Panel:
-	var slot := Panel.new()
+	var slot := UISkin.panel("Slot")
 	slot.custom_minimum_size = Vector2(px, px)
 	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 
@@ -103,6 +100,8 @@ func _make_slot(px: int) -> Panel:
 
 	var count := Label.new()
 	count.name = "Count"
+	count.theme = UISkin.theme()
+	count.theme_type_variation = "SmallLabel"
 	count.anchor_left = 1.0
 	count.anchor_top = 1.0
 	count.anchor_right = 1.0
@@ -113,7 +112,6 @@ func _make_slot(px: int) -> Panel:
 	count.offset_bottom = -2.0
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	count.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
-	count.add_theme_font_size_override("font_size", 14)
 	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(count)
 
@@ -138,8 +136,8 @@ func _update_slots(slots: Array[Panel]) -> void:
 			icon.texture = item.icon
 			var c: int = stack["count"]
 			count.text = str(c) if c > 1 else ""
-			slot.modulate = Color(1.5, 1.5, 1.0) if i == Inventory.selected_index else Color(1, 1, 1)
+			slot.theme_type_variation = "SlotSelected" if i == Inventory.selected_index else "Slot"
 		else:
 			icon.texture = null
 			count.text = ""
-			slot.modulate = Color(1, 1, 1)
+			slot.theme_type_variation = "Slot"

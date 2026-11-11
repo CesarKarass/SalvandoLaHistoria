@@ -17,3 +17,8 @@ func get_flag(key: String, default: bool = false) -> bool:
 
 func has_flag(key: String) -> bool:
 	return flags.has(key)
+
+## Reinicia el progreso para una partida nueva.
+func reset_progress() -> void:
+	flags.clear()
+	pending_spawn = ""

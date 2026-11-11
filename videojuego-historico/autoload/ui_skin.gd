@@ -23,6 +23,12 @@ func panel(variant: String = "MenuPanel") -> Panel:
 	p.theme_type_variation = variant
 	return p
 
+func panel_container(variant: String = "MenuPanel") -> PanelContainer:
+	var p := PanelContainer.new()
+	p.theme = _theme
+	p.theme_type_variation = variant
+	return p
+
 func button(text: String, variant: String = "MenuButton") -> Button:
 	var b := Button.new()
 	b.text = text

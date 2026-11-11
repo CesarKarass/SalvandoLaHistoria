@@ -8,7 +8,7 @@ signal closed
 var _value_labels: Dictionary = {}
 
 func _ready() -> void:
-	layer = 30
+	layer = 50
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build()
 
@@ -22,7 +22,7 @@ func _build() -> void:
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
 
-	var panel := UISkin.panel("MenuPanel")
+	var panel := UISkin.panel_container("MenuPanel")
 	panel.custom_minimum_size = Vector2(440, 0)
 	center.add_child(panel)
 

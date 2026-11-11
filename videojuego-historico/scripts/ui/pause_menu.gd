@@ -1,11 +1,13 @@
 class_name PauseMenu
 extends CanvasLayer
 ## Menú de pausa: se abre/cierra con Esc y pausa el árbol.
+## Al abrir Opciones, oculta su propio contenido para que no se solapen.
 
 const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
 const OPTIONS := "res://scenes/ui/options_menu.tscn"
 
 var _options_node: OptionsMenu = null
+var _content: Control
 
 func _ready() -> void:
 	layer = 40
@@ -25,17 +27,22 @@ func _unhandled_input(event: InputEvent) -> void:
 		close()
 
 func _build() -> void:
+	_content = Control.new()
+	_content.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_content)
+
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.6)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(dim)
+	_content.add_child(dim)
 
 	var center := UISkin.center()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(center)
+	_content.add_child(center)
 
-	var panel := UISkin.panel("MenuPanel")
-	panel.custom_minimum_size = Vector2(340, 0)
+	var panel := UISkin.panel_container("MenuPanel")
+	panel.custom_minimum_size = Vector2(320, 0)
 	center.add_child(panel)
 
 	var col := UISkin.vbox(12)
@@ -63,12 +70,13 @@ func _build() -> void:
 
 func open() -> void:
 	visible = true
+	_content.visible = true
 	get_tree().paused = true
 
 func close() -> void:
+	_close_options()
 	visible = false
 	get_tree().paused = false
-	_close_options()
 
 func _open_options() -> void:
 	if _options_node != null:
@@ -78,15 +86,20 @@ func _open_options() -> void:
 		return
 	_options_node = opts_scene.instantiate() as OptionsMenu
 	_options_node.closed.connect(_on_options_closed)
+	_content.visible = false
 	add_child(_options_node)
 
 func _close_options() -> void:
 	if _options_node != null:
 		_options_node.queue_free()
 		_options_node = null
+	if _content != null:
+		_content.visible = true
 
 func _on_options_closed() -> void:
 	_options_node = null
+	if _content != null:
+		_content.visible = true
 
 func _to_main_menu() -> void:
 	close()

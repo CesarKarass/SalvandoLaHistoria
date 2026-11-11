@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Dialogue" format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/dialogue_line.gd" id="1_8qqu3"]
+[ext_resource type="Script" path="res://scripts/npc/dialogue.gd" id="2_pb7fn"]
+
+[sub_resource type="Resource" id="Resource_n7gs6"]
+script = ExtResource("1_8qqu3")
+text = "¡Bienvenido, viajero del tiempo! El destino de la patria está en juego."
+
+[sub_resource type="Resource" id="Resource_ufahi"]
+script = ExtResource("1_8qqu3")
+text = "Necesito que evites la tragedia en la plaza antes de que sea demasiado tarde."
+
+[sub_resource type="Resource" id="Resource_q23wh"]
+script = ExtResource("1_8qqu3")
+text = "Busca la bolsa de monedas y entrégala a tiempo... ¡rápido!"
+
+[resource]
+script = ExtResource("2_pb7fn")
+npc_name = "Miguel Hidalgo"
+lines = Array[ExtResource("1_8qqu3")]([SubResource("Resource_n7gs6"), SubResource("Resource_ufahi"), SubResource("Resource_q23wh")])

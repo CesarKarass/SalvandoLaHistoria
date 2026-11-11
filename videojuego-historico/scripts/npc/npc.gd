@@ -5,6 +5,7 @@ extends Area2D
 ## Capa de colisión: layer 3 (interactables), monitorable (es detectado por el jugador).
 
 @export var dialogue: Dialogue
+@export var sprite_texture: Texture2D
 @export var prompt_text: String = "Hablar"
 
 @onready var _prompt: Label = $Prompt
@@ -13,7 +14,7 @@ extends Area2D
 func _ready() -> void:
 	_prompt.text = prompt_text
 	_prompt.visible = false
-	_build_placeholder_sprite()
+	_apply_sprite()
 
 ## Punto de entrada de interacción (convención "IInteractable").
 func interact() -> void:
@@ -23,7 +24,10 @@ func interact() -> void:
 func set_prompt_visible(v: bool) -> void:
 	_prompt.visible = v
 
-func _build_placeholder_sprite() -> void:
-	var tex := PlaceholderTexture2D.new()
-	tex.size = Vector2(16, 24)
-	_sprite.texture = tex
+func _apply_sprite() -> void:
+	if sprite_texture != null:
+		_sprite.texture = sprite_texture
+	else:
+		var tex := PlaceholderTexture2D.new()
+		tex.size = Vector2(64, 64)
+		_sprite.texture = tex

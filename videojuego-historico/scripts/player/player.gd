@@ -1,12 +1,20 @@
 class_name Player
 extends CharacterBody2D
 ## Jugador: movimiento cenital en 8 direcciones estilo "Moonlighter" + interacción.
-## Capa de colisión: layer 1 (player), mask 2 (walls). Interactúa con la capa 3 (interactables).
+## Usa los sprites reales (player_idle.png / player_walk.png, frames de 64x64) con
+## animaciones idle_/walk_ por dirección; si faltan, cae a un placeholder.
+
+const FRAME_SIZE := 64
+const ROW_BY_FACING := {
+	"down": 0,
+	"left": 2,
+	"up": 4,
+	"right": 6,
+}
 
 @export var speed: float = 120.0
 @export var acceleration: float = 900.0
 @export var friction: float = 1100.0
-
 ## Permite bloquear el movimiento (diálogos, transiciones, derrota).
 @export var can_move: bool = true
 
@@ -21,8 +29,8 @@ var _nearest: Area2D = null
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-	_ensure_placeholder_frames()
-	_update_animation()
+	_build_frames()
+	_update_animation(false)
 	add_to_group("player")
 	interaction_area.area_entered.connect(_on_interaction_area_entered)
 	interaction_area.area_exited.connect(_on_interaction_area_exited)
@@ -37,7 +45,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if dir != Vector2.ZERO:
 		_update_facing(dir)
-	_update_animation()
+	_update_animation(dir != Vector2.ZERO)
 
 func _process(_delta: float) -> void:
 	_update_nearest()
@@ -82,23 +90,47 @@ func _update_facing(dir: Vector2) -> void:
 	else:
 		facing = "down" if dir.y > 0.0 else "up"
 
-func _update_animation() -> void:
-	if facing == "left" or facing == "right":
-		sprite.animation = "side"
-		sprite.flip_h = facing == "left"
-	else:
-		sprite.animation = facing
-		sprite.flip_h = false
+func _update_animation(is_moving: bool) -> void:
+	var prefix := "walk_" if is_moving else "idle_"
+	var anim := prefix + facing
+	if sprite.sprite_frames != null and sprite.sprite_frames.has_animation(anim):
+		sprite.animation = anim
+	sprite.flip_h = false
 
-## Crea frames placeholder (1 cuadro por dirección) cuando no hay arte.
-func _ensure_placeholder_frames() -> void:
-	var frames: SpriteFrames = sprite.sprite_frames
-	if frames != null and not frames.get_animation_names().is_empty():
+func _build_frames() -> void:
+	var idle_tex: Texture2D = load("res://assets/sprites/player_idle.png") as Texture2D
+	var walk_tex: Texture2D = load("res://assets/sprites/player_walk.png") as Texture2D
+	if idle_tex == null or walk_tex == null:
+		_build_placeholder_frames()
 		return
-	var tex := PlaceholderTexture2D.new()
-	tex.size = Vector2(16, 24)
-	frames = SpriteFrames.new()
-	for anim: StringName in ["down", "up", "side"]:
-		frames.add_animation(anim)
-		frames.add_frame(anim, tex)
+	var frames := SpriteFrames.new()
+	frames.remove_animation("default")
+	for facing_key: String in ROW_BY_FACING.keys():
+		var row: int = int(ROW_BY_FACING[facing_key])
+		frames.add_animation("idle_" + facing_key)
+		frames.set_animation_speed("idle_" + facing_key, 3.0)
+		for c in 2:
+			frames.add_frame("idle_" + facing_key, _make_atlas(idle_tex, c, row))
+		frames.add_animation("walk_" + facing_key)
+		frames.set_animation_speed("walk_" + facing_key, 8.0)
+		for c in 4:
+			frames.add_frame("walk_" + facing_key, _make_atlas(walk_tex, c, row))
 	sprite.sprite_frames = frames
+
+func _build_placeholder_frames() -> void:
+	var tex := PlaceholderTexture2D.new()
+	tex.size = Vector2(FRAME_SIZE, FRAME_SIZE)
+	var frames := SpriteFrames.new()
+	frames.remove_animation("default")
+	for facing_key: String in ROW_BY_FACING.keys():
+		frames.add_animation("idle_" + facing_key)
+		frames.add_frame("idle_" + facing_key, tex)
+		frames.add_animation("walk_" + facing_key)
+		frames.add_frame("walk_" + facing_key, tex)
+	sprite.sprite_frames = frames
+
+func _make_atlas(tex: Texture2D, col: int, row: int) -> AtlasTexture:
+	var at := AtlasTexture.new()
+	at.atlas = tex
+	at.region = Rect2(col * FRAME_SIZE, row * FRAME_SIZE, FRAME_SIZE, FRAME_SIZE)
+	return at

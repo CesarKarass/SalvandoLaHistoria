@@ -17,10 +17,13 @@ var is_active: bool = false
 
 var _hud: HUD = null
 var _timer_running: bool = false
+var _timer_paused: bool = false
 
 func _ready() -> void:
 	_hud = get_node_or_null("HUD") as HUD
 	place_player_at_spawn()
+	DialogueManager.dialogue_started.connect(_on_dialogue_started)
+	DialogueManager.dialogue_finished.connect(_on_dialogue_finished)
 	start_event()
 
 func _process(delta: float) -> void:
@@ -48,11 +51,33 @@ func start_event() -> void:
 func stop_timer() -> void:
 	_timer_running = false
 
+## Pausa el temporizador mientras hay diálogo abierto con un personaje.
+func pause_timer() -> void:
+	if _timer_paused or not _timer_running:
+		return
+	_timer_paused = true
+	_timer_running = false
+
+## Reanuda el temporizador pausado con pause_timer() (si el evento sigue activo).
+func resume_timer() -> void:
+	if not _timer_paused:
+		return
+	_timer_paused = false
+	if is_active:
+		_timer_running = true
+
+func _on_dialogue_started(_dialogue: Dialogue) -> void:
+	pause_timer()
+
+func _on_dialogue_finished() -> void:
+	resume_timer()
+
 func win() -> void:
 	if not is_active:
 		return
 	is_active = false
 	_timer_running = false
+	_timer_paused = false
 	event_won.emit()
 	_on_win()
 
@@ -61,6 +86,7 @@ func lose() -> void:
 		return
 	is_active = false
 	_timer_running = false
+	_timer_paused = false
 	event_lost.emit()
 	_on_lose()
 

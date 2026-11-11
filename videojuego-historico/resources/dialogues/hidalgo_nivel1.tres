@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="Dialogue" format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/dialogue_line.gd" id="1_line"]
+[ext_resource type="Script" path="res://scripts/npc/dialogue_choice.gd" id="2_choice"]
+[ext_resource type="Script" path="res://scripts/npc/dialogue.gd" id="3_dlg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc_hidalgo.png" id="4_tex"]
+
+[sub_resource type="Resource" id="Resource_c1"]
+script = ExtResource("2_choice")
+text = "Una bolsa de monedas para doblar su voluntad."
+next_line = 3
+set_flag = "consejo_bolsa"
+
+[sub_resource type="Resource" id="Resource_c2"]
+script = ExtResource("2_choice")
+text = "El mapa de la plaza para anticipar sus movimientos."
+next_line = 4
+set_flag = "consejo_mapa"
+
+[sub_resource type="Resource" id="Resource_c3"]
+script = ExtResource("2_choice")
+text = "Un discurso inflamado para provocarlo."
+next_line = 5
+set_flag = "consejo_discurso"
+
+[sub_resource type="Resource" id="Resource_l0"]
+script = ExtResource("1_line")
+text = "¡Detente, viajero del tiempo! Soy el cura Miguel Hidalgo. Nos encontramos en Dolores, la madrugada del 16 de septiembre de 1810, y el destino de la patria pende de un hilo."
+set_flag = "met_hidalgo"
+
+[sub_resource type="Resource" id="Resource_l1"]
+script = ExtResource("1_line")
+text = "Cuando lleguemos a la plaza, el Antagonista desafiará a duelo. Antes de enfrentarlo, necesito saber: ¿qué llevarás para ganarle?"
+
+[sub_resource type="Resource" id="Resource_l2"]
+script = ExtResource("1_line")
+text = "Elige con sabiduría, viajero: tu respuesta decidirá el duelo."
+choices = Array[ExtResource("2_choice")]([SubResource("Resource_c1"), SubResource("Resource_c2"), SubResource("Resource_c3")])
+
+[sub_resource type="Resource" id="Resource_l3"]
+script = ExtResource("1_line")
+text = "¡Exacto! La bolsa de monedas doblará su voluntad. Ve y entrégasela al Antagonista antes de que se acabe el tiempo. ¡La patria cuenta contigo!"
+next_line = -2
+
+[sub_resource type="Resource" id="Resource_l4"]
+script = ExtResource("1_line")
+text = "¡Muy bien! Con el mapa anticiparás cada movida suyo. Ve: entrega lo correcto al Antagonista antes de que acabe el tiempo."
+next_line = -2
+
+[sub_resource type="Resource" id="Resource_l5"]
+script = ExtResource("1_line")
+text = "Jm... un discurso no detiene una espada. Piénsalo bien: ¿con qué ganarás el duelo en la plaza?"
+next_line = 1
+
+[resource]
+script = ExtResource("3_dlg")
+npc_name = "Miguel Hidalgo"
+portrait = ExtResource("4_tex")
+lines = Array[ExtResource("1_line")]([SubResource("Resource_l0"), SubResource("Resource_l1"), SubResource("Resource_l2"), SubResource("Resource_l3"), SubResource("Resource_l4"), SubResource("Resource_l5")])

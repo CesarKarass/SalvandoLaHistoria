@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/events/event1/event1.gd" id="1_e1"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/npc/npc.tscn" id="3_npc"]
-[ext_resource type="Resource" path="res://resources/dialogues/hidalgo_intro.tres" id="4_dlg"]
+[ext_resource type="Resource" path="res://resources/dialogues/hidalgo_nivel1.tres" id="4_dlg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="5_hud"]
 [ext_resource type="Script" path="res://scripts/events/interact_target.gd" id="6_target"]
 [ext_resource type="PackedScene" path="res://scenes/items/pickup.tscn" id="7_pickup"]
@@ -17,6 +17,7 @@ radius = 16.0
 
 [node name="Event1" type="Node2D"]
 script = ExtResource("1_e1")
+time_limit = 60.0
 
 [node name="Spawns" type="Node2D" parent="."]
 

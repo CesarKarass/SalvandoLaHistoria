@@ -6,12 +6,9 @@ extends EventBase
 
 @export var win_item_ids: Array[String] = ["bolsa_monedas", "mapa"]
 
-const COLS := 20
-const ROWS := 12
-
 func _ready() -> void:
 	super._ready()
-	TileWorld.clamp_camera(get_tree().get_first_node_in_group("player"), COLS, ROWS)
+	clamp_camera_to_map()
 	var target := get_node_or_null("Antagonista") as InteractTarget
 	if target != null:
 		target.activated.connect(_on_target_activated)

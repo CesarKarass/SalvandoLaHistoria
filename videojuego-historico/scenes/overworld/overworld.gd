@@ -4,9 +4,6 @@ extends LevelBase
 ## instanciada como "Mapa" y editable en el editor. Aquí solo se coloca al
 ## jugador en el spawn indicado y se limita la cámara.
 
-const COLS := 24
-const ROWS := 14
-
 func _ready() -> void:
 	place_player_at_spawn()
-	TileWorld.clamp_camera(get_tree().get_first_node_in_group("player"), COLS, ROWS)
+	clamp_camera_to_map()

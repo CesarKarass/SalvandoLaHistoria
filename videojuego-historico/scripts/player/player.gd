@@ -12,9 +12,14 @@ const ROW_BY_FACING := {
 	"right": 6,
 }
 
+@export_group("Movimiento")
 @export var speed: float = 120.0
-@export var acceleration: float = 900.0
-@export var friction: float = 1100.0
+## Suavizado exponencial de arranque (1/s). Mayor = más "pegado" al stick.
+@export var accel_rate: float = 22.0
+## Suavizado exponencial de freno (1/s). Mayor = frena antes.
+@export var decel_rate: float = 18.0
+## Por debajo de esta velocidad (px/s) se clava a 0 para no "patinar".
+@export var stop_threshold: float = 8.0
 ## Permite bloquear el movimiento (diálogos, transiciones, derrota).
 @export var can_move: bool = true
 
@@ -38,14 +43,32 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var dir := Vector2.ZERO
 	if can_move:
-		dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		dir = Input.get_vector("move_left", "move_right", "move_up", "move_down").limit_length(1.0)
+
 	var target: Vector2 = dir * speed
-	var rate: float = acceleration if dir != Vector2.ZERO else friction
-	velocity = velocity.move_toward(target, rate * delta)
-	move_and_slide()
+	if dir != Vector2.ZERO:
+		# Aceleración exponencial: arranque suave (independiente del frame-rate).
+		velocity = velocity.lerp(target, 1.0 - exp(-accel_rate * delta))
+	else:
+		# Freno exponencial con "ease-out": nunca frena en seco.
+		velocity = velocity.lerp(Vector2.ZERO, 1.0 - exp(-decel_rate * delta))
+		if velocity.length() < stop_threshold:
+			velocity = Vector2.ZERO
+
+	_slide_and_move(delta)
 	if dir != Vector2.ZERO:
 		_update_facing(dir)
 	_update_animation(dir != Vector2.ZERO)
+
+## Mueve por eje para que el jugador se deslice por las esquinas en diagonal:
+## si un eje choca, se anula y el otro sigue (no se queda atorado).
+func _slide_and_move(delta: float) -> void:
+	if velocity.x != 0.0:
+		if move_and_collide(Vector2(velocity.x * delta, 0.0)) != null:
+			velocity.x = 0.0
+	if velocity.y != 0.0:
+		if move_and_collide(Vector2(0.0, velocity.y * delta)) != null:
+			velocity.y = 0.0
 
 func _process(_delta: float) -> void:
 	_update_nearest()

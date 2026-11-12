@@ -11,7 +11,7 @@ radius = 36.0
 collision_mask = 2
 script = ExtResource("1_player")
 speed = 150.0
-acceleration = 1500.0
+accel_rate = 22.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=84894576]
 shape = SubResource("CircleShape2D_1")

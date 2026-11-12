@@ -34,7 +34,10 @@ var _nearest: Area2D = null
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-	_build_frames()
+	# Los frames vienen asignados desde player.tscn (resources/player/player_frames.tres).
+	# Solo se generan en código si la escena no los trae.
+	if sprite.sprite_frames == null:
+		_build_frames()
 	_update_animation(false)
 	add_to_group("player")
 	interaction_area.area_entered.connect(_on_interaction_area_entered)

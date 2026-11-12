@@ -5,6 +5,8 @@ extends Area2D
 
 @export var item: Item
 @export var qty: int = 1
+## Textura visible en el mapa (se puede asignar desde la escena/editor).
+@export var sprite_texture: Texture2D
 
 @onready var _prompt: Label = $Prompt
 @onready var _sprite: Sprite2D = $Sprite2D
@@ -26,10 +28,12 @@ func set_prompt_visible(v: bool) -> void:
 	_prompt.visible = v
 
 func _build_placeholder_sprite() -> void:
-	# Si el objeto tiene icono propio (carpeta inventario/art/icons) se usa ese;
-	# si no, un círculo placeholder.
-	if item != null and item.icon != null:
+	# Prioridad: textura asignada en la escena > icono del item > placeholder.
+	if sprite_texture != null:
+		_sprite.texture = sprite_texture
+	elif item != null and item.icon != null:
 		_sprite.texture = item.icon
 	else:
 		_sprite.texture = PlaceholderArt.circle(12, Color(1.0, 0.85, 0.2))
-	_sprite.scale = Vector2(1.6, 1.6)
+	if _sprite.texture != null and _sprite.texture.get_height() < 32:
+		_sprite.scale = Vector2(1.6, 1.6)

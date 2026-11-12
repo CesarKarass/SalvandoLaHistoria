@@ -1,4 +1,3 @@
-@tool
 class_name Event1
 extends EventBase
 ## Evento 1: "El Duelo en la Plaza de Dolores" (1810).
@@ -11,9 +10,6 @@ const COLS := 20
 const ROWS := 12
 
 func _ready() -> void:
-	TileWorld.build_event_room(self, COLS, ROWS)
-	if Engine.is_editor_hint():
-		return
 	super._ready()
 	TileWorld.clamp_camera(get_tree().get_first_node_in_group("player"), COLS, ROWS)
 	var target := get_node_or_null("Antagonista") as InteractTarget

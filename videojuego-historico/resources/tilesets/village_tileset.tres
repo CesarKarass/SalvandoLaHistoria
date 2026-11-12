@@ -1,0 +1,54 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/tile_floor.png" id="1_3ganc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tile_wall_stone.png" id="2_1200a"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tile_building.png" id="3_8rv7k"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tile_floor_stone.png" id="4_twh3q"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5o36e"]
+texture = ExtResource("1_3ganc")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sn3kk"]
+texture = ExtResource("2_1200a")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fkx07"]
+texture = ExtResource("3_8rv7k")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1p3nn"]
+texture = ExtResource("3_8rv7k")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/modulate = Color(0.72, 0.66, 0.66, 1)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4twrp"]
+texture = ExtResource("4_twh3q")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3hm7b"]
+texture = ExtResource("4_twh3q")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/modulate = Color(0.9, 0.9, 0.95, 1)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mq4bm"]
+texture = ExtResource("1_3ganc")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/modulate = Color(0.92, 0.91, 0.95, 1)
+
+[resource]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_5o36e")
+sources/1 = SubResource("TileSetAtlasSource_sn3kk")
+sources/2 = SubResource("TileSetAtlasSource_fkx07")
+sources/3 = SubResource("TileSetAtlasSource_1p3nn")
+sources/4 = SubResource("TileSetAtlasSource_4twrp")
+sources/5 = SubResource("TileSetAtlasSource_3hm7b")
+sources/6 = SubResource("TileSetAtlasSource_mq4bm")

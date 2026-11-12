@@ -42,12 +42,13 @@ func _run() -> void:
 	var ow: Node2D = (load("res://scenes/overworld/overworld.tscn") as PackedScene).instantiate() as Node2D
 	add_child(ow)
 	await get_tree().process_frame
-	var room := ow.get_node_or_null("Room") as TileMapLayer
+	var room := ow.get_node_or_null("Mapa/Room") as TileMapLayer
 	var cells := 0
 	if room != null:
 		cells = room.get_used_cells().size()
 	results.append("overworld_room_cells=" + str(cells))
-	results.append("overworld_wall_colliders=" + str(ow.get_node_or_null("WallColliders") != null))
+	results.append("overworld_wall_colliders=" + str(ow.get_node_or_null("Mapa/WallColliders") != null))
+	results.append("overworld_props=" + str(ow.get_node_or_null("Mapa") != null and ow.get_node("Mapa").get_child_count() > 5))
 
 	for line: String in results:
 		print("TEST: ", line)

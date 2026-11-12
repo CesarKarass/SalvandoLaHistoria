@@ -1,34 +1,24 @@
-[gd_scene format=3 uid="uid://wl4lvmgrotgc"]
+[gd_scene load_steps=3 format=3 uid="uid://wl4lvmgrotgc"]
 
-[ext_resource type="Script" uid="uid://brgak4usmt8ub" path="res://inventario/data/inventory_grid.gd" id="1_007vy"]
+[ext_resource type="Script" path="res://inventario/inventory_demo.gd" id="1_demo"]
+[ext_resource type="PackedScene" path="res://inventario/UI/inventory_ui.tscn" id="2_ui"]
 
-[node name="InventoryDemo" type="Control" unique_id=1347420022]
+[node name="InventoryDemo" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_demo")
 
-[node name="Background" type="ColorRect" parent="." unique_id=252120449]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-color = Color(0.1254902, 0.14509805, 0.1764706, 1)
+color = Color(0.082, 0.052, 0.059, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1777937543]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="InventoryGrid" type="Control" parent="CenterContainer" unique_id=914793820]
-custom_minimum_size = Vector2(384, 288)
-layout_mode = 2
-script = ExtResource("1_007vy")
+[node name="InventoryUI" parent="." instance=ExtResource("2_ui")]

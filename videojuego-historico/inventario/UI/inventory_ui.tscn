@@ -1,3 +1,7 @@
-[gd_scene format=3 uid="uid://bqnpyura5j4eu"]
+[gd_scene load_steps=2 format=3]
 
-[node name="InventoryUi" type="Node2D" unique_id=105774439]
+[ext_resource type="Script" path="res://inventario/UI/inventory_ui.gd" id="1_inv"]
+
+[node name="InventoryUI" type="CanvasLayer"]
+layer = 15
+script = ExtResource("1_inv")

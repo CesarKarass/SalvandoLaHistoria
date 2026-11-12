@@ -1,3 +1,13 @@
-[gd_resource type="Resource" format=3 uid="uid://dw0kgu5giwnf0"]
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://dw0kgu5giwnf0"]
+
+[ext_resource type="Script" path="res://scripts/items/item.gd" id="1_item"]
+
+[ext_resource type="Texture2D" path="res://inventario/art/icons/medkit.png" id="2_icon"]
 
 [resource]
+script = ExtResource("1_item")
+icon = ExtResource("2_icon")
+id = &"botiquin"
+display_name = "BOTIQUIN"
+grid_size = Vector2i(2, 2)
+grid_color = Color(0.376, 0.467, 0.545, 1)

@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://wl4lvmgrotgc"]
+
+[ext_resource type="Script" uid="uid://brgak4usmt8ub" path="res://inventario/data/inventory_grid.gd" id="1_007vy"]
+
+[node name="InventoryDemo" type="Control" unique_id=1347420022]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="." unique_id=252120449]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.1254902, 0.14509805, 0.1764706, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1777937543]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventoryGrid" type="Control" parent="CenterContainer" unique_id=914793820]
+custom_minimum_size = Vector2(384, 288)
+layout_mode = 2
+script = ExtResource("1_007vy")

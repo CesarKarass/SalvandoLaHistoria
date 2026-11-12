@@ -19,6 +19,8 @@ func interact() -> void:
 		return
 	if Inventory.add_item(item, qty):
 		queue_free()
+	else:
+		_prompt.text = "Sin espacio en mochila"
 
 func set_prompt_visible(v: bool) -> void:
 	_prompt.visible = v

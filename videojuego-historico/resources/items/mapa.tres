@@ -1,11 +1,17 @@
-[gd_resource type="Resource" script_class="Item" format=3]
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/item.gd" id="1_item"]
 
+[ext_resource type="Texture2D" path="res://inventario/art/icons/mapa.png" id="2_icon"]
+
 [resource]
 script = ExtResource("1_item")
+icon = ExtResource("2_icon")
 id = &"mapa"
 display_name = "Mapa antiguo"
 description = "Mapa de la época que muestra el camino seguro hacia la plaza."
 stackable = false
 max_stack = 1
+grid_size = Vector2i(2, 2)
+can_rotate = false
+grid_color = Color(0.3, 0.55, 0.43, 1)

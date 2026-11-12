@@ -1,11 +1,17 @@
-[gd_resource type="Resource" script_class="Item" format=3]
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/item.gd" id="1_item"]
 
+[ext_resource type="Texture2D" path="res://inventario/art/icons/bolsa_monedas.png" id="2_icon"]
+
 [resource]
 script = ExtResource("1_item")
+icon = ExtResource("2_icon")
 id = &"bolsa_monedas"
 display_name = "Bolsa de monedas"
 description = "Monedas de la época para entregar al antagonista y salvar a Hidalgo."
 stackable = false
 max_stack = 1
+grid_size = Vector2i(2, 1)
+can_rotate = true
+grid_color = Color(0.7, 0.55, 0.28, 1)

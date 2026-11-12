@@ -10,7 +10,7 @@ const COLS := 20
 const ROWS := 12
 
 func _ready() -> void:
-	TileWorld.build_room(self, COLS, ROWS)
+	TileWorld.build_event_room(self, COLS, ROWS)
 	super._ready()
 	TileWorld.clamp_camera(get_tree().get_first_node_in_group("player"), COLS, ROWS)
 	var target := get_node_or_null("Antagonista") as InteractTarget

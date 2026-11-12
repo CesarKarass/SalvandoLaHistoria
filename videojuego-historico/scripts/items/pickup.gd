@@ -26,4 +26,10 @@ func set_prompt_visible(v: bool) -> void:
 	_prompt.visible = v
 
 func _build_placeholder_sprite() -> void:
-	_sprite.texture = PlaceholderArt.circle(12, Color(1.0, 0.85, 0.2))
+	# Si el objeto tiene icono propio (carpeta inventario/art/icons) se usa ese;
+	# si no, un círculo placeholder.
+	if item != null and item.icon != null:
+		_sprite.texture = item.icon
+	else:
+		_sprite.texture = PlaceholderArt.circle(12, Color(1.0, 0.85, 0.2))
+	_sprite.scale = Vector2(1.6, 1.6)

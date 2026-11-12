@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/npc/npc.gd" id="1_npc"]
-[ext_resource type="Texture2D" path="res://assets/sprites/npc_hidalgo.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://ct3o38cl37mc7" path="res://scripts/npc/npc.gd" id="1_npc"]
+[ext_resource type="Texture2D" uid="uid://cl552psam8ihr" path="res://assets/sprites/NPC'S/npc_hidalgo.png" id="2_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 16.0

@@ -6,6 +6,8 @@ extends Area2D
 signal activated
 
 @export var prompt_text: String = "Entregar"
+## Textura opcional: si se define, se usa en lugar del cuadrado placeholder.
+@export var sprite_texture: Texture2D
 
 @onready var _prompt: Label = $Prompt
 @onready var _sprite: Sprite2D = $Sprite2D
@@ -22,4 +24,7 @@ func set_prompt_visible(v: bool) -> void:
 	_prompt.visible = v
 
 func _build_placeholder_sprite() -> void:
+	if sprite_texture != null:
+		_sprite.texture = sprite_texture
+		return
 	_sprite.texture = PlaceholderArt.square(28, Color(0.8, 0.2, 0.2))

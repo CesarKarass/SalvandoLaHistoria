@@ -9,7 +9,7 @@ func _run() -> void:
 	var results: Array[String] = []
 
 	var names: Array[String] = [
-		"player_idle", "player_walk", "npc_hidalgo",
+		"player_idle", "player_walk",
 		"tile_floor", "tile_wall", "tile_building",
 	]
 	for n: String in names:
@@ -27,6 +27,9 @@ func _run() -> void:
 	results.append("animaciones=" + str(sf.get_animation_names()))
 	results.append("walk_down_frames=" + str(sf.get_frame_count("walk_down")))
 	results.append("idle_left_frames=" + str(sf.get_frame_count("idle_left")))
+
+	var hidalgo_tex: Texture2D = load("res://assets/sprites/NPC'S/npc_hidalgo.png") as Texture2D
+	results.append("npc_hidalgo=" + ("NULL" if hidalgo_tex == null else str(hidalgo_tex.get_size())))
 
 	# NPC: usa la textura real de Hidalgo.
 	var npc: NPC = (load("res://scenes/npc/npc.tscn") as PackedScene).instantiate() as NPC

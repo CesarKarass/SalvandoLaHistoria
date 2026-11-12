@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl552psam8ihr"
-path="res://.godot/imported/npc_hidalgo.png-cc0c32262d535b5e24b9a64963fe1a48.ctex"
+uid="uid://d0dqgs428jkiu"
+path="res://.godot/imported/B-J Caminando para arriba.png-4115e4a0cd9df9ffc1c4f742188127ad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/npc_hidalgo.png"
-dest_files=["res://.godot/imported/npc_hidalgo.png-cc0c32262d535b5e24b9a64963fe1a48.ctex"]
+source_file="res://assets/sprites/NPC'S/B-J Caminando para arriba.png"
+dest_files=["res://.godot/imported/B-J Caminando para arriba.png-4115e4a0cd9df9ffc1c4f742188127ad.ctex"]
 
 [params]
 

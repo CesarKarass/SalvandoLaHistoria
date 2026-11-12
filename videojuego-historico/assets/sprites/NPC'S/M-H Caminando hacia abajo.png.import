@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjbtvb0h70xdp"
-path="res://.godot/imported/M-H Caminando Derecha.png-995314b7418652868f02218bafc0ada5.ctex"
+uid="uid://spwc3h6kttq6"
+path="res://.godot/imported/M-H Caminando hacia abajo.png-dba76e356d889c8b3ed4a996b6e29449.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Asetss/M-H Caminando Derecha.png"
-dest_files=["res://.godot/imported/M-H Caminando Derecha.png-995314b7418652868f02218bafc0ada5.ctex"]
+source_file="res://assets/sprites/NPC'S/M-H Caminando hacia abajo.png"
+dest_files=["res://.godot/imported/M-H Caminando hacia abajo.png-dba76e356d889c8b3ed4a996b6e29449.ctex"]
 
 [params]
 

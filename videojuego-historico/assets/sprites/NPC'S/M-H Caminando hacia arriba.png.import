@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b32lubddjsnjs"
-path="res://.godot/imported/M-H Caminando hacia arriba.png-f9e104bcb4a3f7acdd0ef1992ee5e23f.ctex"
+path="res://.godot/imported/M-H Caminando hacia arriba.png-379fe81279331a5184daaa5049a80d18.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Asetss/M-H Caminando hacia arriba.png"
-dest_files=["res://.godot/imported/M-H Caminando hacia arriba.png-f9e104bcb4a3f7acdd0ef1992ee5e23f.ctex"]
+source_file="res://assets/sprites/NPC'S/M-H Caminando hacia arriba.png"
+dest_files=["res://.godot/imported/M-H Caminando hacia arriba.png-379fe81279331a5184daaa5049a80d18.ctex"]
 
 [params]
 

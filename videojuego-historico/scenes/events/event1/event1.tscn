@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scenes/events/event1/event1.gd" id="1_e1"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -11,9 +11,14 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="9_invui"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="10_pause"]
 [ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="11_touch"]
+[ext_resource type="Texture2D" path="res://assets/sprites/NPC'S/B-J Caminando para abajo.png" id="12_antag"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_target"]
 radius = 16.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_antag"]
+atlas = ExtResource("12_antag")
+region = Rect2(14, 14, 18, 34)
 
 [node name="Event1" type="Node2D"]
 script = ExtResource("1_e1")
@@ -42,12 +47,14 @@ monitoring = false
 monitorable = true
 script = ExtResource("6_target")
 prompt_text = "Entregar"
+sprite_texture = SubResource("AtlasTexture_antag")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Antagonista"]
 shape = SubResource("CircleShape2D_target")
 
 [node name="Sprite2D" type="Sprite2D" parent="Antagonista"]
-position = Vector2(0, -14)
+position = Vector2(0, -34)
+scale = Vector2(2, 2)
 
 [node name="Prompt" type="Label" parent="Antagonista"]
 offset_left = -48.0

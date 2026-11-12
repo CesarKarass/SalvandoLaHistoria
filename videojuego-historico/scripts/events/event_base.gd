@@ -24,6 +24,9 @@ func _ready() -> void:
 	start_event()
 
 func _process(delta: float) -> void:
+	# En el editor (scripts @tool) el temporizador no debe correr.
+	if Engine.is_editor_hint():
+		return
 	if not _timer_running:
 		return
 	time_remaining -= delta

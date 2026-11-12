@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" format=3]
+
+[ext_resource type="Script" path="res://scripts/items/item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"mapa"
+display_name = "Mapa antiguo"
+description = "Mapa de la época que muestra el camino seguro hacia la plaza."
+stackable = false
+max_stack = 1

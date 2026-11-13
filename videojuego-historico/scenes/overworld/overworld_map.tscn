@@ -1,14 +1,14 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://c6o7kvsa2872"]
 
 [ext_resource type="TileSet" path="res://resources/tilesets/village_tileset.tres" id="1_1f2me"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/door.png" id="2_kbt4i"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/well.png" id="3_snnkg"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/bench.png" id="4_kwlud"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/crate.png" id="5_egjma"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/tree.png" id="6_0rn2x"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/rock.png" id="7_hg054"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/grass.png" id="8_7v7qr"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/shadow.png" id="9_x3e5x"]
+[ext_resource type="Texture2D" uid="uid://6kiemyphnw5e" path="res://assets/sprites/props/door.png" id="2_kbt4i"]
+[ext_resource type="Texture2D" uid="uid://6vp044onpar6" path="res://assets/sprites/props/well.png" id="3_snnkg"]
+[ext_resource type="Texture2D" uid="uid://dtweyyxlt85ad" path="res://assets/sprites/props/bench.png" id="4_kwlud"]
+[ext_resource type="Texture2D" uid="uid://3oec4w2152kk" path="res://assets/sprites/props/crate.png" id="5_egjma"]
+[ext_resource type="Texture2D" uid="uid://bti0lv3glr3xv" path="res://assets/sprites/props/tree.png" id="6_0rn2x"]
+[ext_resource type="Texture2D" uid="uid://d2y1q8uygfrlv" path="res://assets/sprites/props/rock.png" id="7_hg054"]
+[ext_resource type="Texture2D" uid="uid://dghvcw1ck3atl" path="res://assets/sprites/props/grass.png" id="8_7v7qr"]
+[ext_resource type="Texture2D" uid="uid://c6slk6vwbk7b3" path="res://assets/sprites/props/shadow.png" id="9_x3e5x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wvv0h"]
 size = Vector2(64, 896)
@@ -34,8 +34,7 @@ size = Vector2(256, 192)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ouh2x"]
 size = Vector2(256, 192)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xk2lx"]
-size = Vector2(44, 28)
+[sub_resource type="CircleShape2D" id="CircleShape2D_h3udd"]
 
 [node name="MapaAldea" type="Node2D" unique_id=239686058]
 
@@ -85,8 +84,9 @@ position = Vector2(1216, 544)
 shape = SubResource("RectangleShape2D_ouh2x")
 
 [node name="Pozo" type="CollisionShape2D" parent="Obstacles" unique_id=2323013]
-position = Vector2(672, 416.8)
-shape = SubResource("RectangleShape2D_xk2lx")
+position = Vector2(672, 407)
+scale = Vector2(2, 2)
+shape = SubResource("CircleShape2D_h3udd")
 
 [node name="Props" type="Node2D" parent="." unique_id=598548668]
 

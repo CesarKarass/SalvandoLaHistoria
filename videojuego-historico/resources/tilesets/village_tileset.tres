@@ -1,9 +1,9 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://tv3vix6kwbfy"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/tile_floor.png" id="1_3ganc"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tile_wall_stone.png" id="2_1200a"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tile_building.png" id="3_8rv7k"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tile_floor_stone.png" id="4_twh3q"]
+[ext_resource type="Texture2D" uid="uid://cdre3ryxdn0db" path="res://assets/sprites/tile_floor.png" id="1_3ganc"]
+[ext_resource type="Texture2D" uid="uid://dexilf577clwk" path="res://assets/sprites/tile_wall_stone.png" id="2_1200a"]
+[ext_resource type="Texture2D" uid="uid://ha2bhomb4ih2" path="res://assets/sprites/tile_building.png" id="3_8rv7k"]
+[ext_resource type="Texture2D" uid="uid://b48nctgrwy6r1" path="res://assets/sprites/tile_floor_stone.png" id="4_twh3q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5o36e"]
 texture = ExtResource("1_3ganc")

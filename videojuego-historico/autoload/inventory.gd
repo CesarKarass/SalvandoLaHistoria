@@ -134,6 +134,40 @@ func move_item(item_index: int, position: Vector2i, size: Vector2i) -> bool:
 	return true
 
 
+## Gira el objeto buscando su lugar: primero la casilla solicitada,
+## después la posición libre más cercana (distancia Manhattan).
+## Nunca altera el inventario si no existe una ubicación válida.
+func rotate_item_near(item_index: int, preferred_position: Vector2i) -> bool:
+	if item_index < 0 or item_index >= items.size():
+		return false
+	var entry: Dictionary = items[item_index]
+	var item: Item = entry["item"] as Item
+	if item == null or not item.can_rotate:
+		return false
+	var current_size: Vector2i = entry["size"]
+	var rotated_size := Vector2i(current_size.y, current_size.x)
+	var position: Vector2i = _find_nearest_space(item_index, preferred_position, rotated_size)
+	if position.x < 0:
+		return false
+	return move_item(item_index, position, rotated_size)
+
+
+func _find_nearest_space(excluded_index: int, origin: Vector2i, item_size: Vector2i) -> Vector2i:
+	if _can_place_in(items, excluded_index, origin, item_size):
+		return origin
+	var best := Vector2i(-1, -1)
+	var best_distance: int = 999999
+	for y in range(ROWS - item_size.y + 1):
+		for x in range(COLUMNS - item_size.x + 1):
+			var candidate := Vector2i(x, y)
+			if not _can_place_in(items, excluded_index, candidate, item_size):
+				continue
+			var distance: int = absi(x - origin.x) + absi(y - origin.y)
+			if distance < best_distance:
+				best_distance = distance
+				best = candidate
+	return best
+
 func clear() -> void:
 	items.clear()
 	selected_index = 0

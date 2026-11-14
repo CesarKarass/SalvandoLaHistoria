@@ -14,6 +14,8 @@ const VALID_COLOR := Color("#a0e4a2")
 const INVALID_COLOR := Color("#ee7772")
 const SELECTED_COLOR := Color("#f4c46d")
 
+signal rotation_rejected
+
 var dragging_index: int = -1
 var drag_offset: Vector2i = Vector2i.ZERO
 var drag_size: Vector2i = Vector2i.ZERO
@@ -108,13 +110,33 @@ func rotate_item() -> void:
 	var entry: Dictionary = Inventory.items[index]
 	var item: Item = entry["item"] as Item
 	if item == null or not item.can_rotate:
+		rotation_rejected.emit()
 		return
+
+	var preferred_position: Vector2i = entry["position"]
+	var next_offset := drag_offset
 	if dragging_index != -1:
-		drag_size = Vector2i(drag_size.y, drag_size.x)
-		drag_offset = Vector2i(mini(drag_offset.x, drag_size.x - 1), mini(drag_offset.y, drag_size.y - 1))
-	else:
-		var old_size: Vector2i = entry["size"]
-		Inventory.move_item(index, entry["position"], Vector2i(old_size.y, old_size.x))
+		var size_after: Vector2i = Vector2i(drag_size.y, drag_size.x)
+		next_offset = Vector2i(
+			mini(drag_offset.x, size_after.x - 1),
+			mini(drag_offset.y, size_after.y - 1)
+		)
+		preferred_position = mouse_to_cell() - next_offset
+
+	# Se rota y recoloca atómicamente: nunca se modifica a medias un objeto.
+	if not Inventory.rotate_item_near(index, preferred_position):
+		rotation_rejected.emit()
+		queue_redraw()
+		return
+
+	if dragging_index != -1:
+		drag_size = Inventory.items[index]["size"]
+		drag_offset = next_offset
+		# Si hubo que buscar otra zona, dejamos el objeto allí y terminamos
+		# el arrastre para que el cursor no muestre una posición inválida.
+		if Inventory.items[index]["position"] != preferred_position:
+			dragging_index = -1
+			_touch_index = -1
 	queue_redraw()
 
 

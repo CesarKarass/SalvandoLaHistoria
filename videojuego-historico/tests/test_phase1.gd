@@ -60,6 +60,18 @@ func _run() -> void:
 	Input.action_release("move_right")
 	results.append("colision_x_final=" + str(player.global_position.x) + " (muro en x=48)")
 
+	# --- 5) Deslizamiento en esquina: en diagonal contra el muro, X se bloquea
+	#         pero Y sigue avanzando (no se queda atorado). ---
+	player.global_position = Vector2(0, 0)
+	player.velocity = Vector2.ZERO
+	Input.action_press("move_right")
+	Input.action_press("move_down")
+	for i in 90:
+		await get_tree().physics_frame
+	Input.action_release("move_right")
+	Input.action_release("move_down")
+	results.append("esquina_x=" + str(player.global_position.x) + " esquina_y=" + str(player.global_position.y))
+
 	for line: String in results:
 		print("TEST: ", line)
 	print("TEST_DONE")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scenes/events/event1/event1.gd" id="1_e1"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -11,9 +11,16 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="9_invui"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="10_pause"]
 [ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="11_touch"]
+[ext_resource type="Texture2D" path="res://assets/sprites/NPC'S/B-J Caminando para abajo.png" id="12_antag"]
+[ext_resource type="PackedScene" path="res://scenes/events/event1/event1_map.tscn" id="13_map"]
+[ext_resource type="Texture2D" path="res://inventario/art/icons/bolsa_monedas.png" id="14_bolsa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_target"]
 radius = 16.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_antag"]
+atlas = ExtResource("12_antag")
+region = Rect2(14, 14, 18, 34)
 
 [node name="Event1" type="Node2D"]
 script = ExtResource("1_e1")
@@ -23,6 +30,8 @@ time_limit = 60.0
 
 [node name="SpawnDefault" type="Marker2D" parent="Spawns"]
 position = Vector2(640, 384)
+
+[node name="Mapa" parent="." instance=ExtResource("13_map")]
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(640, 384)
@@ -34,6 +43,7 @@ dialogue = ExtResource("4_dlg")
 [node name="PickupBolsa" parent="." instance=ExtResource("7_pickup")]
 position = Vector2(640, 256)
 item = ExtResource("8_bolsa")
+sprite_texture = ExtResource("14_bolsa")
 
 [node name="Antagonista" type="Area2D" parent="."]
 position = Vector2(1000, 384)
@@ -43,12 +53,14 @@ monitoring = false
 monitorable = true
 script = ExtResource("6_target")
 prompt_text = "Entregar"
+sprite_texture = SubResource("AtlasTexture_antag")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Antagonista"]
 shape = SubResource("CircleShape2D_target")
 
 [node name="Sprite2D" type="Sprite2D" parent="Antagonista"]
-position = Vector2(0, -14)
+position = Vector2(0, -34)
+scale = Vector2(2, 2)
 
 [node name="Prompt" type="Label" parent="Antagonista"]
 offset_left = -48.0

@@ -1,11 +1,9 @@
 extends LevelBase
-## Overworld (mapa general): construye una sala con tiles reales y coloca al
-## jugador en el spawn indicado.
-
-const COLS := 24
-const ROWS := 14
+## Overworld (mapa general).
+## La aldea es la escena `overworld_map.tscn` (TileMapLayer + props + colisiones),
+## instanciada como "Mapa" y editable en el editor. Aquí solo se coloca al
+## jugador en el spawn indicado y se limita la cámara.
 
 func _ready() -> void:
-	TileWorld.build_room(self, COLS, ROWS)
 	place_player_at_spawn()
-	TileWorld.clamp_camera(get_tree().get_first_node_in_group("player"), COLS, ROWS)
+	clamp_camera_to_map()

@@ -12,15 +12,16 @@ func _ready() -> void:
 	_build()
 
 func _build() -> void:
-	var joystick := TouchJoystick.new()
+	# Zona táctil del joystick flotante: mitad izquierda de la pantalla.
+	var joystick := FloatingJoystick.new()
 	joystick.anchor_left = 0.0
-	joystick.anchor_top = 1.0
-	joystick.anchor_right = 0.0
+	joystick.anchor_top = 0.0
+	joystick.anchor_right = 0.5
 	joystick.anchor_bottom = 1.0
-	joystick.offset_left = 36.0
-	joystick.offset_top = -190.0
-	joystick.offset_right = 186.0
-	joystick.offset_bottom = -40.0
+	joystick.offset_left = 0.0
+	joystick.offset_top = 0.0
+	joystick.offset_right = 0.0
+	joystick.offset_bottom = 0.0
 	add_child(joystick)
 
 	var interact := _make_button("E", "interact")

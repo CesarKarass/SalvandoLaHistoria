@@ -19,6 +19,11 @@ func _process(_delta: float) -> void:
 	if not Input.is_action_just_pressed("cancel"):
 		return
 	if not visible:
+		# Esc cierra primero la mochila, sin abrir dos menús a la vez.
+		var inventory_ui := get_parent().get_node_or_null("InventoryUI")
+		if inventory_ui != null and inventory_ui.has_method("is_open") and inventory_ui.call("is_open"):
+			inventory_ui.call("close")
+			return
 		open()
 	elif _options_node != null:
 		_close_options()

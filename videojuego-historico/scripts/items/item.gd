@@ -1,7 +1,6 @@
 class_name Item
 extends Resource
-## Objeto del inventario. Propiedades básicas + atributos extendidos que
-## usarán los Eventos 2–5 (resistencia al fuego, durabilidad, peso...).
+## Atributos existentes del juego + forma espacial del inventario de la carpeta inventario/.
 
 @export var id: StringName = &""
 @export var display_name: String = ""
@@ -9,9 +8,12 @@ extends Resource
 @export_multiline var description: String = ""
 @export var stackable: bool = false
 @export var max_stack: int = 1
-## Dónde es útil (ids de eventos), para validaciones futuras.
 @export var valid_for: Array[StringName] = []
-## Atributos para eventos posteriores (El Pípila, barricadas...).
 @export var has_fire_resistance: bool = false
 @export var durability: int = 0
 @export var weight: float = 0.0
+
+@export_group("Inventario espacial")
+@export var grid_size: Vector2i = Vector2i(1, 1)
+@export var can_rotate: bool = true
+@export var grid_color: Color = Color("#60778B")

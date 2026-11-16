@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://c6o7kvsa2872"]
 
-[ext_resource type="TileSet" path="res://resources/tilesets/village_tileset.tres" id="1_1f2me"]
+[ext_resource type="TileSet" uid="uid://tv3vix6kwbfy" path="res://resources/tilesets/village_tileset.tres" id="1_1f2me"]
 [ext_resource type="Texture2D" uid="uid://6kiemyphnw5e" path="res://assets/sprites/props/door.png" id="2_kbt4i"]
 [ext_resource type="Texture2D" uid="uid://6vp044onpar6" path="res://assets/sprites/props/well.png" id="3_snnkg"]
 [ext_resource type="Texture2D" uid="uid://dtweyyxlt85ad" path="res://assets/sprites/props/bench.png" id="4_kwlud"]
@@ -92,7 +92,7 @@ shape = SubResource("CircleShape2D_h3udd")
 
 [node name="Puerta" type="Sprite2D" parent="Props" unique_id=650845945]
 z_index = -2
-position = Vector2(288, 320)
+position = Vector2(310, 415)
 texture = ExtResource("2_kbt4i")
 offset = Vector2(0, -31)
 

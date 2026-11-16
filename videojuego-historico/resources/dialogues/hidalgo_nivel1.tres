@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/npc/dialogue_line.gd" id="1_line"]
 [ext_resource type="Script" path="res://scripts/npc/dialogue_choice.gd" id="2_choice"]
 [ext_resource type="Script" path="res://scripts/npc/dialogue.gd" id="3_dlg"]
-[ext_resource type="Texture2D" path="res://assets/sprites/npc_hidalgo.png" id="4_tex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/NPC'S/npc_hidalgo.png" id="4_tex"]
 
 [sub_resource type="Resource" id="Resource_c1"]
 script = ExtResource("2_choice")

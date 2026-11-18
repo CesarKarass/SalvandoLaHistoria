@@ -47,14 +47,16 @@ func _run() -> void:
 
 	# --- 2) Rama correcta: quick_1 (bolsa) → línea 3 → fin ---
 	await _start_dialogue(dlg)
+	var box := DialogueManager._box
+	var tam_caja := box._bg.size
 	await _reach_choices()
 	results.append("eligiendo=" + str(DialogueManager.state == DialogueManager.State.CHOOSING))
-	var box := DialogueManager._box
 	results.append("panel_en_bocadillo=" + str(box._choices_box.get_parent() == box._bg))
 	results.append("panel_visible=" + str(box._choices_box.visible))
-	# Diseño tipo Sally Face: misma forma del cuadro y solo se ven las opciones.
+	# Misma forma del cuadro con o sin alternativas: el tamaño no cambia y
+	# solo se ven las opciones.
 	results.append("texto_oculto=" + str(not box._text_label.visible))
-	results.append("misma_forma=" + str(box._bg.offset_top == -150.0))
+	results.append("misma_forma=" + str(box._bg.size == tam_caja and box._bg.size.y > 0.0))
 	await _tap("quick_1")
 	results.append("texto_visible_tras_elegir=" + str(box._text_label.visible))
 	results.append("rama_correcta_linea=" + str(DialogueManager._line_index))

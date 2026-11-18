@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Dialogue" format=3]
+
+[ext_resource type="Script" path="res://scripts/npc/dialogue_line.gd" id="1_line"]
+[ext_resource type="Script" path="res://scripts/npc/dialogue.gd" id="2_dlg"]
+
+[sub_resource type="Resource" id="Resource_l0"]
+script = ExtResource("1_line")
+text = "Buenos días, viajero. La plaza de Dolores está en calma... por ahora."
+
+[sub_resource type="Resource" id="Resource_l1"]
+script = ExtResource("1_line")
+text = "El cura Hidalgo espera junto al camino. Ve a hablar con él antes de que anochezca."
+
+[resource]
+script = ExtResource("2_dlg")
+npc_name = "Viajero"
+lines = Array[ExtResource("1_line")]([SubResource("Resource_l0"), SubResource("Resource_l1")])

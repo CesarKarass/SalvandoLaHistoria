@@ -1,0 +1,197 @@
+[gd_scene load_steps=30 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/npc/npc.tscn" id="2_npc"]
+[ext_resource type="Resource" path="res://resources/dialogues/hidalgo_nivel1.tres" id="3_dlg_h"]
+[ext_resource type="Resource" path="res://resources/dialogues/viajero_plaza.tres" id="4_dlg_v"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="5_invui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="6_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/touch_controls.tscn" id="7_touch"]
+[ext_resource type="TileSet" path="res://resources/tilesets/village_tileset.tres" id="8_tileset"]
+[ext_resource type="Texture2D" path="res://assets/sprites/NPC'S/M-H Caminando hacia abajo.png" id="9_mh"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/casa_adobe_128x128.png" id="t0"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/casa_blanca_128x128.png" id="t1"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/arbol_128x128.png" id="t2"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/techo_tejas_64x64.png" id="t3"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/barril_a_64x64.png" id="t4"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/barril_b_64x64.png" id="t5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/crate.png" id="t6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/well.png" id="t7"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/pila_de_madera_64x64.png" id="t8"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/arbusto_64x64.png" id="t9"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/helecho_a_64x64.png" id="t10"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/helecho_b_64x64.png" id="t11"]
+[ext_resource type="Texture2D" path="res://assets/Accest_Dialago_Prueba1/png/rocas_64x64.png" id="t12"]
+[ext_resource type="Texture2D" path="res://assets/sprites/props/grass.png" id="t13"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_norte"]
+size = Vector2(1536, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sur"]
+size = Vector2(1536, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oeste"]
+size = Vector2(64, 896)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_este"]
+size = Vector2(64, 896)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fachada"]
+size = Vector2(64, 768)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_viajero"]
+atlas = ExtResource("9_mh")
+region = Rect2(13, 16, 18, 34)
+
+[node name="PlazaPrueba" type="Node2D"]
+
+[node name="Mapa" type="Node2D" parent="."]
+
+[node name="Room" type="TileMapLayer" parent="Mapa"]
+z_index = -10
+tile_set = ExtResource("8_tileset")
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAABAAAAAQAAAAAAAAACAAAAAQAAAAAAAAADAAAAAQAAAAAAAAAEAAAAAQAAAAAAAAAFAAAAAQAAAAAAAAAGAAAAAQAAAAAAAAAHAAAAAQAAAAAAAAAIAAAAAQAAAAAAAAAJAAAAAQAAAAAAAAAKAAAAAQAAAAAAAAALAAAAAQAAAAAAAAAMAAAAAQAAAAAAAAANAAAAAQAAAAAAAAAOAAAAAQAAAAAAAAAPAAAAAQAAAAAAAAAQAAAAAQAAAAAAAAARAAAAAQAAAAAAAAASAAAAAQAAAAAAAAATAAAAAQAAAAAAAAAUAAAAAQAAAAAAAAAVAAAAAQAAAAAAAAAWAAAAAQAAAAAAAAAXAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAABAAEAAAAAAAAAAAACAAEAAgAAAAAAAAADAAEAAgAAAAAAAAAEAAEAAgAAAAAAAAAFAAEAAgAAAAAAAAAGAAEAAgAAAAAAAAAHAAEAAgAAAAAAAAAIAAEAAgAAAAAAAAAJAAEAAgAAAAAAAAAKAAEAAgAAAAAAAAALAAEABAAAAAAAAAAMAAEABAAAAAAAAAANAAEABAAAAAAAAAAOAAEAAgAAAAAAAAAPAAEAAgAAAAAAAAAQAAEAAgAAAAAAAAARAAEAAgAAAAAAAAASAAEAAgAAAAAAAAATAAEAAgAAAAAAAAAUAAEAAgAAAAAAAAAVAAEAAgAAAAAAAAAWAAEAAgAAAAAAAAAXAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAABAAIAAAAAAAAAAAACAAIAAgAAAAAAAAADAAIAAgAAAAAAAAAEAAIAAgAAAAAAAAAFAAIAAgAAAAAAAAAGAAIAAgAAAAAAAAAHAAIAAgAAAAAAAAAIAAIAAgAAAAAAAAAJAAIAAgAAAAAAAAAKAAIAAgAAAAAAAAALAAIABAAAAAAAAAAMAAIABAAAAAAAAAANAAIABAAAAAAAAAAOAAIAAgAAAAAAAAAPAAIAAgAAAAAAAAAQAAIAAgAAAAAAAAARAAIAAgAAAAAAAAASAAIAAgAAAAAAAAATAAIAAgAAAAAAAAAUAAIAAgAAAAAAAAAVAAIAAgAAAAAAAAAWAAIAAgAAAAAAAAAXAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAABAAMAAAAAAAAAAAACAAMAAgAAAAAAAAADAAMAAgAAAAAAAAAEAAMAAgAAAAAAAAAFAAMAAgAAAAAAAAAGAAMAAgAAAAAAAAAHAAMAAgAAAAAAAAAIAAMAAgAAAAAAAAAJAAMAAgAAAAAAAAAKAAMAAgAAAAAAAAALAAMABAAAAAAAAAAMAAMABAAAAAAAAAANAAMABAAAAAAAAAAOAAMAAgAAAAAAAAAPAAMAAgAAAAAAAAAQAAMAAgAAAAAAAAARAAMAAgAAAAAAAAASAAMAAgAAAAAAAAATAAMAAgAAAAAAAAAUAAMAAgAAAAAAAAAVAAMAAgAAAAAAAAAWAAMAAgAAAAAAAAAXAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAHAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAJAAQAAAAAAAAAAAAKAAQAAAAAAAAAAAALAAQABAAAAAAAAAAMAAQABAAAAAAAAAANAAQABAAAAAAAAAAOAAQAAAAAAAAAAAAPAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAARAAQAAAAAAAAAAAASAAQAAAAAAAAAAAATAAQAAAAAAAAAAAAUAAQAAAAAAAAAAAAVAAQAAAAAAAAAAAAWAAQAAgAAAAAAAAAXAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUABQAAAAAAAAAKAAUABQAAAAAAAAALAAUABAAAAAAAAAAMAAUABAAAAAAAAAANAAUABAAAAAAAAAAOAAUABQAAAAAAAAAPAAUABQAAAAAAAAAQAAUAAAAAAAAAAAARAAUAAAAAAAAAAAASAAUAAAAAAAAAAAATAAUAAAAAAAAAAAAUAAUAAAAAAAAAAAAVAAUAAAAAAAAAAAAWAAUAAgAAAAAAAAAXAAUAAQAAAAAAAAAAAAYAAQAAAAAAAAABAAYAAAAAAAAAAAACAAYAAAAAAAAAAAADAAYAAAAAAAAAAAAEAAYAAAAAAAAAAAAFAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAHAAYAAAAAAAAAAAAIAAYAAAAAAAAAAAAJAAYABQAAAAAAAAAKAAYABQAAAAAAAAALAAYABAAAAAAAAAAMAAYABAAAAAAAAAANAAYABAAAAAAAAAAOAAYABQAAAAAAAAAPAAYABQAAAAAAAAAQAAYAAAAAAAAAAAARAAYAAAAAAAAAAAASAAYAAAAAAAAAAAATAAYAAAAAAAAAAAAUAAYAAAAAAAAAAAAVAAYAAAAAAAAAAAAWAAYAAgAAAAAAAAAXAAYAAQAAAAAAAAAAAAcAAQAAAAAAAAABAAcABAAAAAAAAAACAAcABAAAAAAAAAADAAcABAAAAAAAAAAEAAcABAAAAAAAAAAFAAcABAAAAAAAAAAGAAcABAAAAAAAAAAHAAcABAAAAAAAAAAIAAcABAAAAAAAAAAJAAcABAAAAAAAAAAKAAcABAAAAAAAAAALAAcABAAAAAAAAAAMAAcABAAAAAAAAAANAAcABAAAAAAAAAAOAAcABAAAAAAAAAAPAAcABAAAAAAAAAAQAAcABAAAAAAAAAARAAcABAAAAAAAAAASAAcABAAAAAAAAAATAAcABAAAAAAAAAAUAAcABAAAAAAAAAAVAAcABAAAAAAAAAAWAAcAAgAAAAAAAAAXAAcAAQAAAAAAAAAAAAgAAQAAAAAAAAABAAgABAAAAAAAAAACAAgABAAAAAAAAAADAAgABAAAAAAAAAAEAAgABAAAAAAAAAAFAAgABAAAAAAAAAAGAAgABAAAAAAAAAAHAAgABAAAAAAAAAAIAAgABAAAAAAAAAAJAAgABAAAAAAAAAAKAAgABAAAAAAAAAALAAgABAAAAAAAAAAMAAgABAAAAAAAAAANAAgABAAAAAAAAAAOAAgABAAAAAAAAAAPAAgABAAAAAAAAAAQAAgABAAAAAAAAAARAAgABAAAAAAAAAASAAgABAAAAAAAAAATAAgABAAAAAAAAAAUAAgABAAAAAAAAAAVAAgABAAAAAAAAAAWAAgAAgAAAAAAAAAXAAgAAQAAAAAAAAAAAAkAAQAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkABQAAAAAAAAAKAAkABQAAAAAAAAALAAkABAAAAAAAAAAMAAkABAAAAAAAAAANAAkABAAAAAAAAAAOAAkABQAAAAAAAAAPAAkABQAAAAAAAAAQAAkAAAAAAAAAAAARAAkAAAAAAAAAAAASAAkAAAAAAAAAAAATAAkAAAAAAAAAAAAUAAkAAAAAAAAAAAAVAAkAAAAAAAAAAAAWAAkAAgAAAAAAAAAXAAkAAQAAAAAAAAAAAAoAAQAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAADAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAAFAAoAAAAAAAAAAAAGAAoAAAAAAAAAAAAHAAoAAAAAAAAAAAAIAAoAAAAAAAAAAAAJAAoABQAAAAAAAAAKAAoABQAAAAAAAAALAAoABAAAAAAAAAAMAAoABAAAAAAAAAANAAoABAAAAAAAAAAOAAoABQAAAAAAAAAPAAoABQAAAAAAAAAQAAoAAAAAAAAAAAARAAoAAAAAAAAAAAASAAoAAAAAAAAAAAATAAoAAAAAAAAAAAAUAAoAAAAAAAAAAAAVAAoAAAAAAAAAAAAWAAoAAgAAAAAAAAAXAAoAAQAAAAAAAAAAAAsAAQAAAAAAAAABAAsAAAAAAAAAAAACAAsAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAsAAAAAAAAAAAAHAAsAAAAAAAAAAAAIAAsAAAAAAAAAAAAJAAsABQAAAAAAAAAKAAsABQAAAAAAAAALAAsABAAAAAAAAAAMAAsABAAAAAAAAAANAAsABAAAAAAAAAAOAAsABQAAAAAAAAAPAAsABQAAAAAAAAAQAAsAAAAAAAAAAAARAAsAAAAAAAAAAAASAAsAAAAAAAAAAAATAAsAAAAAAAAAAAAUAAsAAAAAAAAAAAAVAAsAAAAAAAAAAAAWAAsAAgAAAAAAAAAXAAsAAQAAAAAAAAAAAAwAAQAAAAAAAAABAAwAAAAAAAAAAAACAAwAAAAAAAAAAAADAAwAAAAAAAAAAAAEAAwAAAAAAAAAAAAFAAwAAAAAAAAAAAAGAAwAAAAAAAAAAAAHAAwAAAAAAAAAAAAIAAwAAAAAAAAAAAAJAAwAAAAAAAAAAAAKAAwAAAAAAAAAAAALAAwABAAAAAAAAAAMAAwABAAAAAAAAAANAAwABAAAAAAAAAAOAAwAAAAAAAAAAAAPAAwAAAAAAAAAAAAQAAwAAAAAAAAAAAARAAwAAAAAAAAAAAASAAwAAAAAAAAAAAATAAwAAAAAAAAAAAAUAAwAAAAAAAAAAAAVAAwAAAAAAAAAAAAWAAwAAgAAAAAAAAAXAAwAAQAAAAAAAAAAAA0AAQAAAAAAAAABAA0AAQAAAAAAAAACAA0AAQAAAAAAAAADAA0AAQAAAAAAAAAEAA0AAQAAAAAAAAAFAA0AAQAAAAAAAAAGAA0AAQAAAAAAAAAHAA0AAQAAAAAAAAAIAA0AAQAAAAAAAAAJAA0AAQAAAAAAAAAKAA0AAQAAAAAAAAALAA0AAQAAAAAAAAAMAA0AAQAAAAAAAAANAA0AAQAAAAAAAAAOAA0AAQAAAAAAAAAPAA0AAQAAAAAAAAAQAA0AAQAAAAAAAAARAA0AAQAAAAAAAAASAA0AAQAAAAAAAAATAA0AAQAAAAAAAAAUAA0AAQAAAAAAAAAVAA0AAQAAAAAAAAAWAA0AAQAAAAAAAAAXAA0AAQAAAAAAAAA=")
+
+[node name="WallColliders" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="Norte" type="CollisionShape2D" parent="WallColliders"]
+position = Vector2(768, 32)
+shape = SubResource("RectangleShape2D_norte")
+
+[node name="Sur" type="CollisionShape2D" parent="WallColliders"]
+position = Vector2(768, 864)
+shape = SubResource("RectangleShape2D_sur")
+
+[node name="Oeste" type="CollisionShape2D" parent="WallColliders"]
+position = Vector2(32, 448)
+shape = SubResource("RectangleShape2D_oeste")
+
+[node name="Este" type="CollisionShape2D" parent="WallColliders"]
+position = Vector2(1504, 448)
+shape = SubResource("RectangleShape2D_este")
+
+[node name="FachadaDerecha" type="CollisionShape2D" parent="WallColliders"]
+position = Vector2(1440, 448)
+shape = SubResource("RectangleShape2D_fachada")
+
+[node name="Props" type="Node2D" parent="."]
+
+[node name="CasaAdobe" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(448, 224)
+texture = ExtResource("t0")
+
+[node name="CasaBlanca" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1120, 224)
+texture = ExtResource("t1")
+
+[node name="Arbol" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(416, 356)
+texture = ExtResource("t2")
+
+[node name="TechoPuesto" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1088, 378)
+texture = ExtResource("t3")
+
+[node name="TechoPuesto2" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1148, 378)
+texture = ExtResource("t3")
+
+[node name="TechoPuesto3" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1208, 378)
+texture = ExtResource("t3")
+
+[node name="BarrilA" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1088, 398)
+texture = ExtResource("t4")
+
+[node name="BarrilB" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1152, 397)
+texture = ExtResource("t5")
+
+[node name="CajaMercado" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1216, 400)
+texture = ExtResource("t6")
+
+[node name="Well" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(800, 534)
+texture = ExtResource("t7")
+
+[node name="PilaMadera" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1440, 653)
+texture = ExtResource("t8")
+
+[node name="Arbusto" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1088, 701)
+texture = ExtResource("t9")
+
+[node name="HelechoA" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(640, 680)
+texture = ExtResource("t10")
+
+[node name="HelechoB" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(960, 719)
+texture = ExtResource("t11")
+
+[node name="Rocas" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(448, 689)
+texture = ExtResource("t12")
+
+[node name="Grama1" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(352, 616)
+texture = ExtResource("t13")
+
+[node name="Grama2" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(1120, 632)
+texture = ExtResource("t13")
+
+[node name="Grama3" type="Sprite2D" parent="Props"]
+z_index = -1
+position = Vector2(560, 264)
+texture = ExtResource("t13")
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="SpawnDefault" type="Marker2D" parent="Spawns"]
+position = Vector2(800, 464)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(800, 464)
+
+[node name="Camera2D" parent="Player"]
+limit_left = 32
+limit_top = 32
+limit_right = 1504
+limit_bottom = 864
+
+[node name="Hidalgo" parent="." instance=ExtResource("2_npc")]
+position = Vector2(920, 640)
+dialogue = ExtResource("3_dlg_h")
+
+[node name="Viajero" parent="." instance=ExtResource("2_npc")]
+position = Vector2(416, 512)
+dialogue = ExtResource("4_dlg_v")
+sprite_texture = SubResource("AtlasTexture_viajero")
+
+[node name="InventoryUI" parent="." instance=ExtResource("5_invui")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+
+[node name="TouchControls" parent="." instance=ExtResource("7_touch")]

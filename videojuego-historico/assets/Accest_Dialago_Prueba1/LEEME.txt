@@ -1,0 +1,3 @@
+Salvando la Historia - assets del juego (Pixelorama + PNG)
+pxo/ : archivos .pxo para abrir en Pixelorama.   png/ : el mismo asset en PNG para Godot.
+Todo sin texto. Personajes 64x64, casas y arbol 128x128, mapa 512x917, caja de dialogo 512x139.

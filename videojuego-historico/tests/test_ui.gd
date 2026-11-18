@@ -44,10 +44,12 @@ func _run() -> void:
 	var menu: CanvasLayer = (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate() as CanvasLayer
 	add_child(menu)
 	await get_tree().process_frame
+	# El menú usa TextureButton (BaseButton) desde el rediseño con arte pixel-art;
+	# no tienen `text`, así que se reportan por nombre de nodo.
 	var menu_buttons: Array[String] = []
 	for c in _all_controls(menu):
-		if c is Button:
-			menu_buttons.append((c as Button).text)
+		if c is BaseButton:
+			menu_buttons.append(String(c.name))
 	results.append("menu_botones=" + str(menu_buttons))
 
 	# --- 3) Opciones: 3 sliders + 1 check y panel centrado ---

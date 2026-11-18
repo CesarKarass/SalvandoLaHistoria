@@ -1,3 +1,8 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Godot AI (plugin MCP local de desarrollo; no se versiona).
+# Ojo: project.godot tiene una entrada local [editor_plugins] que lo activa;
+# esa línea NO se commitea para no romper el editor del resto del equipo.
+videojuego-historico/addons/godot_ai/

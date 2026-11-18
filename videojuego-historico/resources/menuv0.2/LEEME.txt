@@ -1,0 +1,6 @@
+Salvando la Historia - assets del menu (Pixelorama)
+Abre los .pxo de la carpeta pxo/ con Pixelorama (Archivo > Abrir).
+- fondo_512x512.pxo : fondo sin titulo ni botones (1 capa)
+- titulo_128x41.pxo : titulo 128 px de ancho (capas: texto, adorno)
+- boton_*_amarillo.pxo / boton_*_gris_click.pxo : botones normal y clickeado (capas: texto, vinetas)
+Si algun .pxo no abre en tu version, usa png_respaldo/ (Archivo > Abrir o Importar).

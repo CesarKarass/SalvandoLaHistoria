@@ -1,38 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://c0joo0s08vgg7"]
+[gd_scene load_steps=6 format=3 uid="uid://c0joo0s08vgg7"]
 
 [ext_resource type="Script" uid="uid://crexsf0qhva6r" path="res://scripts/ui/main_menu.gd" id="1_menu"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/fondo_512x512.png" id="2_fondo"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/titulo_128x77.png" id="3_titulo"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/boton_jugar_normal_64x64.png" id="4_jn"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/boton_jugar_presionado_64x64.png" id="5_jp"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/boton_opciones_normal_64x64.png" id="6_on"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/boton_opciones_presionado_64x64.png" id="7_op"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/boton_salir_normal_64x64.png" id="8_sn"]
-[ext_resource type="Texture2D" path="res://resources/Menu/png/boton_salir_presionado_64x64.png" id="9_sp"]
-
-[sub_resource type="AtlasTexture" id="Atlas_jn"]
-atlas = ExtResource("4_jn")
-region = Rect2(11, 26, 42, 12)
-
-[sub_resource type="AtlasTexture" id="Atlas_jp"]
-atlas = ExtResource("5_jp")
-region = Rect2(11, 26, 42, 12)
-
-[sub_resource type="AtlasTexture" id="Atlas_on"]
-atlas = ExtResource("6_on")
-region = Rect2(1, 26, 62, 12)
-
-[sub_resource type="AtlasTexture" id="Atlas_op"]
-atlas = ExtResource("7_op")
-region = Rect2(1, 26, 62, 12)
-
-[sub_resource type="AtlasTexture" id="Atlas_sn"]
-atlas = ExtResource("8_sn")
-region = Rect2(13, 26, 37, 12)
-
-[sub_resource type="AtlasTexture" id="Atlas_sp"]
-atlas = ExtResource("9_sp")
-region = Rect2(13, 26, 37, 12)
+[ext_resource type="Script" path="res://scripts/ui/boton_menu.gd" id="2_boton"]
+[ext_resource type="Texture2D" path="res://resources/menuv0.2/png/fondo.png" id="3_fondo"]
+[ext_resource type="Texture2D" path="res://resources/menuv0.2/png/titulo.png" id="4_titulo"]
+[ext_resource type="AudioStreamMP3" path="res://resources/menuv0.2/musicamenu/menu.mp3" id="5_musica"]
 
 [node name="MainMenu" type="CanvasLayer" unique_id=1612487447]
 script = ExtResource("1_menu")
@@ -40,59 +12,74 @@ script = ExtResource("1_menu")
 [node name="Fondo" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -128.0
-offset_bottom = 286.0
 mouse_filter = 2
-texture = ExtResource("2_fondo")
+texture = ExtResource("3_fondo")
 expand_mode = 1
 stretch_mode = 6
+texture_filter = 1
 
-[node name="Titulo" type="TextureRect" parent="."]
-offset_left = 80.0
-offset_top = 24.0
-offset_right = 464.0
-offset_bottom = 255.0
+[node name="Vigneta" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource("3_titulo")
 expand_mode = 1
-stretch_mode = 4
-
-[node name="Botones" type="VBoxContainer" parent="."]
-offset_left = 88.0
-offset_top = 286.0
-offset_right = 336.0
-offset_bottom = 462.0
-theme_override_constants/separation = 16
-
-[node name="BtnJugar" type="TextureButton" parent="Botones"]
-custom_minimum_size = Vector2(168, 48)
-size_flags_horizontal = 0
-focus_mode = 2
-ignore_texture_size = true
 stretch_mode = 0
-texture_normal = SubResource("Atlas_jn")
-texture_pressed = SubResource("Atlas_jp")
-texture_hover = SubResource("Atlas_jp")
 
-[node name="BtnOpciones" type="TextureButton" parent="Botones"]
-custom_minimum_size = Vector2(248, 48)
-size_flags_horizontal = 0
-focus_mode = 2
-ignore_texture_size = true
+[node name="OscurecerIzq" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
 stretch_mode = 0
-texture_normal = SubResource("Atlas_on")
-texture_pressed = SubResource("Atlas_op")
-texture_hover = SubResource("Atlas_op")
 
-[node name="BtnSalir" type="TextureButton" parent="Botones"]
-custom_minimum_size = Vector2(148, 48)
-size_flags_horizontal = 0
+[node name="Columna" type="Control" parent="."]
+offset_right = 132.0
+offset_bottom = 185.0
+mouse_filter = 2
+
+[node name="Titulo" type="TextureRect" parent="Columna"]
+offset_left = 2.0
+offset_right = 130.0
+offset_bottom = 41.0
+mouse_filter = 2
+texture = ExtResource("4_titulo")
+texture_filter = 1
+
+[node name="BotonContinuar" type="Control" parent="Columna"]
+offset_top = 55.0
+offset_right = 132.0
+offset_bottom = 83.0
 focus_mode = 2
-ignore_texture_size = true
-stretch_mode = 0
-texture_normal = SubResource("Atlas_sn")
-texture_pressed = SubResource("Atlas_sp")
-texture_hover = SubResource("Atlas_sp")
+script = ExtResource("2_boton")
+id_boton = "continuar"
+
+[node name="BotonNuevoJuego" type="Control" parent="Columna"]
+offset_top = 89.0
+offset_right = 132.0
+offset_bottom = 117.0
+focus_mode = 2
+script = ExtResource("2_boton")
+id_boton = "nuevo_juego"
+
+[node name="BotonOpciones" type="Control" parent="Columna"]
+offset_top = 123.0
+offset_right = 132.0
+offset_bottom = 151.0
+focus_mode = 2
+script = ExtResource("2_boton")
+id_boton = "opciones"
+
+[node name="BotonSalir" type="Control" parent="Columna"]
+offset_top = 157.0
+offset_right = 132.0
+offset_bottom = 185.0
+focus_mode = 2
+script = ExtResource("2_boton")
+id_boton = "salir"
+
+[node name="MusicaMenu" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_musica")
+volume_db = -4.0
 
 [node name="Version" type="Label" parent="."]
 anchor_left = 1.0
@@ -104,11 +91,7 @@ offset_top = -30.0
 offset_right = -12.0
 offset_bottom = -10.0
 mouse_filter = 2
-text = "prototipo · v0.1"
+text = "prototipo · v0.2"
 horizontal_alignment = 2
 theme_override_colors/font_color = Color(0.95, 0.95, 0.92, 0.9)
 theme_override_font_sizes/font_size = 12
-
-[connection signal="pressed" from="Botones/BtnJugar" to="." method="_on_play"]
-[connection signal="pressed" from="Botones/BtnOpciones" to="." method="_on_options"]
-[connection signal="pressed" from="Botones/BtnSalir" to="." method="_on_quit"]

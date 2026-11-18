@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://preview/prueba_interaccion.gd" id="1_prueba"]
+[ext_resource type="PackedScene" path="res://scenes/menu_inicio.tscn" id="2_menu"]
+
+[node name="PruebaInteraccion" type="Node"]
+script = ExtResource("1_prueba")
+
+[node name="MenuInicio" parent="." instance=ExtResource("2_menu")]

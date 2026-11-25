@@ -37,11 +37,20 @@ func _ready() -> void:
 	queue_redraw()
 
 func _process(delta: float) -> void:
+	# Auto-sanación: si el release se perdió (p. ej. al pausar el árbol),
+	# liberamos la acción para que no quede un botón "fantasma" pulsado.
+	if _pressed and _touch_index == -1 \
+			and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		forzar_soltar()
 	if _pulse >= 0.0:
 		_pulse += delta / maxf(release_time * 2.0, 0.01)
 		if _pulse >= 1.0:
 			_pulse = -1.0
 		queue_redraw()
+
+func _exit_tree() -> void:
+	# La escena se va con el botón pulsado: el release no llegaría nunca.
+	forzar_soltar()
 
 func _on_resized() -> void:
 	pivot_offset = size * 0.5
@@ -103,6 +112,16 @@ func _release() -> void:
 	if action != "":
 		Input.action_release(action)
 	_juice_release()
+
+## Liberación forzada sin animación: la usan la pausa, el cambio de escena y
+## la salida del árbol para no dejar la acción pulsada.
+func forzar_soltar() -> void:
+	if not _pressed:
+		return
+	_pressed = false
+	_touch_index = -1
+	if action != "":
+		Input.action_release(action)
 
 func _juice_press() -> void:
 	_kill_tween()

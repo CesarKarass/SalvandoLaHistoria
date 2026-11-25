@@ -19,6 +19,9 @@ var _choice_index: int = 0
 var _used_choices: Dictionary = {}
 var _box: DialogueBox
 var _start_frame: int = -1
+## Frame en el que Esc cerró el diálogo: PauseMenu lo consulta para no abrir
+## la pausa en ese mismo frame (el mismo Esc no debe hacer las dos cosas).
+var cancel_consumado_frame: int = -1
 
 func _ready() -> void:
 	var box_scene := load("res://scenes/ui/dialogue_box.tscn") as PackedScene
@@ -29,6 +32,10 @@ func _ready() -> void:
 func start(dialogue: Dialogue) -> void:
 	if dialogue == null or state != State.IDLE:
 		return
+	# Si el diálogo se abre con el joystick o un botón todavía pulsados, el
+	# release llegaría a esta caja (que tapa la pantalla) y quedaría el input
+	# fantasma: se libera todo aquí, antes de mostrar nada.
+	TouchControls.liberar_entrada()
 	_dialogue = dialogue
 	_line_index = 0
 	_box.open()
@@ -53,6 +60,13 @@ func advance() -> void:
 
 func _process(_delta: float) -> void:
 	if state == State.IDLE:
+		return
+	# Esc cierra el diálogo cuando queramos, sin tener que esperar a que
+	# terminen las líneas pendientes. Se marca el frame para que PauseMenu
+	# no abra la pausa con esa misma pulsación.
+	if Input.is_action_just_pressed("cancel"):
+		cancel_consumado_frame = Engine.get_process_frames()
+		close_now()
 		return
 	# Evita que la misma pulsación que abrió el diálogo lo avance en el mismo frame.
 	if Engine.get_process_frames() == _start_frame:
@@ -158,6 +172,13 @@ func _show_current_line() -> void:
 func _on_line_typed() -> void:
 	if state == State.TYPING:
 		_enter_waiting_or_choosing()
+
+## Cierra el diálogo en cualquier estado (botón "Cerrar", Esc o cambio de
+## escena) sin esperar a que terminen las líneas pendientes.
+func close_now() -> void:
+	if state == State.IDLE:
+		return
+	_finish()
 
 func _finish() -> void:
 	_box.hide_choices()

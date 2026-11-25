@@ -28,7 +28,24 @@ var _tween: Tween
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
+func _exit_tree() -> void:
+	# Si la escena se va con el joystick pulsado, el evento de release llega a
+	# un nodo ya liberado y las acciones quedan pegadas: aquí las soltamos para
+	# que el siguiente nivel no arranque moviéndose solo.
+	_active = false
+	_touch_index = -1
+	_knob = Vector2.ZERO
+	if _tween != null and _tween.is_valid():
+		_tween.kill()
+	_emit(Vector2.ZERO)
+
 func _process(_delta: float) -> void:
+	# Auto-sanación: si el release se perdió (p. ej. al pausar el árbol, que
+	# no reparte eventos a los controles), el joystick no queda "fantasma"
+	# moviendo al personaje sin que nadie lo toque.
+	if _active and _touch_index == -1 \
+			and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		end_touch()
 	if _active or _alpha > 0.001:
 		queue_redraw()
 
@@ -80,10 +97,13 @@ func drag(pos: Vector2) -> void:
 ## Suelta: el knob vuelve al centro y el joystick se desvanece.
 func end_touch() -> void:
 	_active = false
+	_touch_index = -1
 	_knob = Vector2.ZERO
-	_fade(0.0)
+	# Fuera del árbol (al salir de la escena) no hay tween que animar.
+	if is_inside_tree():
+		_fade(0.0)
+		queue_redraw()
 	_emit(Vector2.ZERO)
-	queue_redraw()
 
 func _emit(dir: Vector2) -> void:
 	var l := dir.length()

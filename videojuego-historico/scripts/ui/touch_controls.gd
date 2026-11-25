@@ -6,10 +6,46 @@ extends CanvasLayer
 
 @export var force_visible: bool = true
 
+## Acciones que estos controles pueden dejar presionadas. Si una escena muere
+## con el joystick o un botón abajo, el release nunca llega y el siguiente
+## nivel arrancaría moviéndose solo: se liberan en cada cambio de escena.
+const ACCIONES := [
+	"move_left", "move_right", "move_up", "move_down",
+	"interact", "inventory",
+]
+
 func _ready() -> void:
 	layer = 10
+	add_to_group("controles_tactiles")
 	visible = force_visible or DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
 	_build()
+	# Un nivel nuevo nunca debe arrancar con "input fantasma" heredado.
+	liberar_entrada()
+
+func _exit_tree() -> void:
+	# Al salir no dejamos nada pulsado (el release llegaría a un nodo liberado).
+	liberar_entrada()
+
+## Libera las acciones táctiles y suelta joystick/botones. Es estático para que
+## DialogueManager, PauseMenu y SceneTransition puedan llamarlo en cualquier
+## momento (cambio de escena, apertura de menús, inicio de un diálogo).
+static func liberar_entrada() -> void:
+	for accion in ACCIONES:
+		Input.action_release(accion)
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null:
+		return
+	for nodo in tree.get_nodes_in_group("controles_tactiles"):
+		if nodo is TouchControls:
+			(nodo as TouchControls)._resetear_controles()
+
+## Suelta el joystick y los botones hijos (sin animación).
+func _resetear_controles() -> void:
+	for hijo in get_children():
+		if hijo is FloatingJoystick:
+			(hijo as FloatingJoystick).end_touch()
+		elif hijo is TouchButton:
+			(hijo as TouchButton).forzar_soltar()
 
 func _build() -> void:
 	# Zona táctil del joystick flotante: mitad izquierda de la pantalla.

@@ -18,8 +18,17 @@ func change_scene(path: String, spawn_id: String = "") -> void:
 		return
 	_in_progress = true
 	GameManager.pending_spawn = spawn_id
+	# Estado limpio al salir: sin pausa, sin diálogo abierto (se solaparía con
+	# la interfaz de inicio) y sin acciones táctiles pegadas (el personaje del
+	# siguiente nivel no debe arrancar caminando solo).
+	get_tree().paused = false
+	DialogueManager.close_now()
+	TouchControls.liberar_entrada()
 	await _layer.collapse()
 	get_tree().change_scene_to_file(path)
+	# La escena que entra arranca limpia por si acaso.
+	get_tree().paused = false
+	TouchControls.liberar_entrada()
 	await _layer.expand()
 	_in_progress = false
 	transition_finished.emit()

@@ -68,6 +68,10 @@ var _choice_labels: Array[Label] = []
 var _choice_texts: Array[String] = []
 var _choice_used: Array[bool] = []
 var _selected_choice: int = 0
+## Plato y etiqueta del botón "Cerrar" (se coloca DESPUÉS del captador para
+## quedar encima y poder cerrar el diálogo cuando queramos).
+var _close_plate: Panel
+var _close_label: Label
 ## Captador de toques a pantalla completa (avanzar diálogo); se oculta mientras
 ## se elige una alternativa para no tapar los clics/touches sobre las opciones.
 var _catcher: Control
@@ -257,6 +261,24 @@ func _build_ui() -> void:
 	_catcher.gui_input.connect(_on_catcher_input)
 	add_child(_catcher)
 
+	# --- Botón "Cerrar": añadido DESPUÉS del captador, así queda encima y
+	# recibe el toque (no avanza el diálogo). Siempre visible mientras la caja
+	# esté abierta: el diálogo se puede cerrar cuando queramos.
+	_close_plate = Panel.new()
+	_close_plate.add_theme_stylebox_override("panel", _estilo_boton())
+	_close_plate.mouse_filter = Control.MOUSE_FILTER_STOP
+	_close_plate.gui_input.connect(_on_close_input)
+	add_child(_close_plate)
+
+	_close_label = Label.new()
+	_close_label.text = "Cerrar"
+	_close_label.add_theme_color_override("font_color", COL_BOTON_TEXTO)
+	_close_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_close_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# La etiqueta es decorativa: el clic lo recibe el plato de debajo.
+	_close_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_close_label)
+
 
 ## Coloca la caja en pantalla y reescala todos sus elementos al tamaño real.
 ## Se ejecuta al abrir y cada vez que cambia el tamaño de la ventana.
@@ -307,6 +329,19 @@ func _ajustar_layout() -> void:
 	_next_label.position = _next_plate.position
 	_next_label.size = _next_plate.size
 
+	# Botón "Cerrar": al inicio de la MISMA franja inferior (a la izquierda),
+	# en coordenadas de pantalla porque vive fuera del plato de la caja.
+	var ancho_cerrar := maxf(f_pista * 4.8, 64.0 * e)
+	var pos_cerrar := _bg.position + Vector2(
+		ZONA_PISTA.position.x * e,
+		ZONA_PISTA.position.y * e - (alto_btn - ZONA_PISTA.size.y * e) * 0.5
+	)
+	_close_plate.position = pos_cerrar
+	_close_plate.size = Vector2(ancho_cerrar, alto_btn)
+	_close_label.position = pos_cerrar
+	_close_label.size = Vector2(ancho_cerrar, alto_btn)
+	_close_label.add_theme_font_size_override("font_size", f_pista)
+
 	# Tipografía proporcional a la caja: legible en PC y en móvil.
 	var f_nombre := maxi(12, roundf(e * 15.0))
 	var f_texto := maxi(11, roundf(e * 13.0))
@@ -333,6 +368,20 @@ func _on_catcher_input(event: InputEvent) -> void:
 		pressed = event.pressed
 	if pressed:
 		DialogueManager.advance()
+
+
+## Clic/tap sobre "Cerrar": cierra el diálogo al instante, sin esperar a que
+## terminen las líneas pendientes.
+func _on_close_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	var pressed := false
+	if event is InputEventMouseButton:
+		pressed = event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+	elif event is InputEventScreenTouch:
+		pressed = event.pressed
+	if pressed:
+		DialogueManager.close_now()
 
 
 ## Clic/tap directo sobre una alternativa: la elige al instante (en escritorio

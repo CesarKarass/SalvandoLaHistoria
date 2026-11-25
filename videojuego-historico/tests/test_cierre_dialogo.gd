@@ -1,6 +1,7 @@
 extends Node2D
 ## Cierre del diálogo bajo demanda:
-## - el botón "Cerrar" cierra en cualquier momento (sin esperar las líneas);
+## - la opción "Gracias, nos vemos" sale en cualquier momento (sin esperar
+##   las líneas) y ya no hay botones "Continuar"/"Cerrar";
 ## - Esc cierra el diálogo y NO abre la pausa en ese mismo frame;
 ## - Esc sin diálogo sí abre la pausa;
 ## - abrir un diálogo libera el input táctil (nadie queda "caminando solo").
@@ -8,6 +9,16 @@ extends Node2D
 
 func _ready() -> void:
 	_run()
+
+## ¿Existe algún texto "Continuar"/"Cerrar" colgando de la caja? (ya no debe
+## haber botones: la salida es la opción de diálogo "Gracias, nos vemos").
+func _hay_texto(nodo: Node, buscado: String) -> bool:
+	if nodo is Label and (nodo as Label).text == buscado:
+		return true
+	for hijo in nodo.get_children():
+		if _hay_texto(hijo, buscado):
+			return true
+	return false
 
 func _run() -> void:
 	var results: Array[String] = []
@@ -20,22 +31,39 @@ func _run() -> void:
 	add_child(pause)
 	await get_tree().process_frame
 
-	# --- 1) El diálogo abre y el botón "Cerrar" existe ---
+	# --- 1) El diálogo abre con la opción de salida y SIN botones ---
 	DialogueManager.start(dlg)
 	await get_tree().process_frame
+	var box := DialogueManager._box
 	results.append("abierto=" + str(DialogueManager.state != DialogueManager.State.IDLE))
-	results.append("boton_cerrar=" + str(
-			DialogueManager._box._close_label != null
-			and DialogueManager._box._close_label.text == "Cerrar"))
+	results.append("opcion_salir=" + str(
+			box._salir_label != null
+			and box._salir_label.text == DialogueBox.TEXTO_SALIR))
+	results.append("sin_boton_continuar=" + str(not _hay_texto(box, "Continuar")))
+	results.append("sin_boton_cerrar=" + str(not _hay_texto(box, "Cerrar")))
 
-	# --- 2) Clic en "Cerrar": cierra al instante ---
+	# --- 2) Clic en "Gracias, nos vemos": sale al instante ---
 	var ev := InputEventMouseButton.new()
 	ev.button_index = MOUSE_BUTTON_LEFT
 	ev.pressed = true
-	DialogueManager._box._on_close_input(ev)
-	results.append("cerrar_al_instante=" + str(DialogueManager.state == DialogueManager.State.IDLE))
-	results.append("caja_oculta=" + str(not DialogueManager._box.visible))
+	box._on_salir_input(ev)
+	results.append("salir_al_instante=" + str(DialogueManager.state == DialogueManager.State.IDLE))
+	results.append("caja_oculta=" + str(not box.visible))
 	results.append("pausa_intacta=" + str(not pause.visible))
+
+	# --- 2b) La opción de salida también va DENTRO de la lista de
+	# alternativas (como una opción más, al final) y al tocarla cierra. ---
+	DialogueManager.start(dlg)
+	await get_tree().process_frame
+	box.show_choices(["Primera opción", "Segunda opción"], 0)
+	results.append("salir_en_lista=" + str(
+			box._salir_index == 2
+			and box._choice_labels[2].visible
+			and box._choice_labels[2].text == DialogueBox.TEXTO_SALIR))
+	results.append("sin_salir_en_franja=" + str(not box._salir_label.visible))
+	box._on_choice_gui_input(ev, 2)   # clic sobre "Gracias, nos vemos"
+	results.append("salir_por_lista=" + str(DialogueManager.state == DialogueManager.State.IDLE))
+	results.append("franja_vuelve=" + str(box._salir_label.visible))
 
 	# --- 3) Esc cierra el diálogo y consume el cancel (no abre pausa) ---
 	DialogueManager.start(dlg)

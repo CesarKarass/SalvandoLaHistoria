@@ -5,15 +5,20 @@ extends CanvasLayer
 ##
 ## El asset ya dibuja el marco del retrato (izquierda) y el panel de texto
 ## (derecha); aquí solo se colocan encima el retrato, el nombre, el texto con
-## máquina de escribir, el botón "Continuar" y las alternativas. Todo se
-## dimensiona a partir del ancho de la caja con la proporción 512x139 del
-## asset, así que la caja se adapta a cualquier pantalla sin deformarse
-## (móvil incluido).
+## máquina de escribir, las alternativas y la opción de salida
+## "Gracias, nos vemos" (que sustituye a los botones "Continuar" y "Cerrar").
+## Todo se dimensiona a partir del ancho de la caja con la proporción
+## 512x139 del asset, así que la caja se adapta a cualquier pantalla sin
+## deformarse (móvil incluido).
 ##
-## Sin flechas ni ayuda de teclado: la alternativa marcada se distingue solo
-## por el color (rojo) y las ya usadas en gris. Mantiene la API de siempre
-## (show_line / show_choices / hide_choices / open / close y la señal
-## line_typed), así que DialogueManager no cambia.
+## Sin flechas, sin números ni ayuda de teclado: las alternativas se muestran
+## solo con su texto (la marcada en rojo y las ya usadas en gris), y
+## "Gracias, nos vemos" aparece como una alternativa más al final de la lista
+## para salir del cuadro cuando queramos (en las líneas sin alternativas se
+## ve en la franja inferior). Tocar cualquier parte de la caja avanza la
+## línea. Mantiene la API de siempre (show_line / show_choices /
+## hide_choices / open / close y la señal line_typed), así que
+## DialogueManager no cambia.
 
 signal line_typed
 
@@ -25,7 +30,7 @@ const ALTO_ASSET := 139.0
 
 ## Regiones medidas sobre el PNG de 512x139 (píxeles del asset):
 ## marco del retrato (interior), zona del nombre, zona del texto y franja
-## inferior para el botón "Continuar".
+## inferior para la opción de salida "Gracias, nos vemos".
 const MARCO_RETRATO := Rect2(33, 27, 85, 86)
 const ZONA_NOMBRE := Rect2(136, 19, 348, 17)
 const ZONA_TEXTO := Rect2(136, 37, 348, 70)
@@ -36,9 +41,9 @@ const COL_TEXT := Color(0.27, 0.15, 0.10)         # texto marrón
 const COL_NOMBRE := Color(0.44, 0.23, 0.13)       # nombre marrón cálido
 const COL_SELECTED := Color(0.62, 0.24, 0.10)     # alternativa marcada (rojo)
 const COL_USED := Color(0.47, 0.38, 0.34)         # alternativa ya usada (gris)
-const COL_BOTON := Color(0.30, 0.16, 0.10, 0.92)  # plato del botón
-const COL_BOTON_BORDE := Color(0.55, 0.36, 0.20)  # borde del plato
-const COL_BOTON_TEXTO := Color(0.98, 0.93, 0.80)  # texto crema
+
+## Texto de la opción que sale del cuadro de diálogo.
+const TEXTO_SALIR := "Gracias, nos vemos"
 
 ## Ocupación de la pantalla (la caja casi toca los bordes laterales).
 const ANCHO_PANTALLA := 0.94
@@ -60,23 +65,26 @@ var _portrait_frame: Panel
 var _portrait: TextureRect
 var _name_label: Label
 var _text_label: RichTextLabel
-var _next_label: Label
-## Plato trasero del botón "Continuar" (la etiqueta lo controla con su visibilidad).
-var _next_plate: Panel
+## Opción de salida "Gracias, nos vemos" en la franja inferior (abajo a la
+## derecha): se ve en las líneas SIN alternativas. Durante la elección la
+## opción de salida va como una alternativa más al final de la lista
+## (`_choice_labels`). Se coloca DESPUÉS del captador para quedar encima y
+## recibir el toque (no avanza el diálogo, lo cierra).
+var _salir_label: Label
 var _choices_box: VBoxContainer
 var _choice_labels: Array[Label] = []
 var _choice_texts: Array[String] = []
 var _choice_used: Array[bool] = []
 var _selected_choice: int = 0
-## Plato y etiqueta del botón "Cerrar" (se coloca DESPUÉS del captador para
-## quedar encima y poder cerrar el diálogo cuando queramos).
-var _close_plate: Panel
-var _close_label: Label
 ## Captador de toques a pantalla completa (avanzar diálogo); se oculta mientras
 ## se elige una alternativa para no tapar los clics/touches sobre las opciones.
 var _catcher: Control
 ## Escala actual del asset (1 px de asset = _e px de pantalla).
 var _e := 1.0
+## Índice (dentro de `_choice_labels`) de la opción de salida cuando se
+## muestra una lista: es el último elemento visible, tras las alternativas
+## reales. -1 si no hay lista visible.
+var _salir_index := -1
 
 
 func _ready() -> void:
@@ -94,7 +102,6 @@ func _process(delta: float) -> void:
 	_text_label.visible_characters = _visible_chars
 	if _visible_chars >= _full_text.length():
 		_typing = false
-		_next_label.visible = true
 		line_typed.emit()
 
 
@@ -109,7 +116,6 @@ func show_line(speaker: String, portrait: Texture2D, text: String) -> void:
 	_text_label.visible_characters = 0
 	_visible_chars = 0
 	_typing = true
-	_next_label.visible = false
 	hide_choices()
 
 
@@ -121,27 +127,30 @@ func complete_line() -> void:
 	_visible_chars = _full_text.length()
 	_text_label.visible_characters = _visible_chars
 	_typing = false
-	_next_label.visible = true
 
 
 ## Muestra las alternativas DENTRO del bocadillo (misma forma siempre):
-## se oculta el texto anterior y solo se ven las opciones de respuesta,
-## con la opción `selected` en rojo y las ya usadas en gris. Sin flechas
-## ni ayuda de teclado.
+## se oculta el texto anterior y solo se ven las opciones de respuesta (más
+## "Gracias, nos vemos" como última opción para salir), con la opción
+## `selected` en rojo y las ya usadas en gris. Sin flechas, sin números ni
+## ayuda de teclado: solo el texto de cada alternativa.
 func show_choices(texts: Array[String], selected: int, used: Array[bool] = []) -> void:
 	_choice_texts = texts.duplicate()
 	_choice_used.resize(texts.size())
 	_choice_used.fill(false)
 	for i: int in mini(texts.size(), used.size()):
 		_choice_used[i] = used[i]
+	# Se ven las alternativas reales + la opción de salida al final.
+	_salir_index = texts.size()
 	for i: int in _choice_labels.size():
-		_choice_labels[i].visible = i < texts.size()
+		_choice_labels[i].visible = i <= _salir_index
 	# Solo se ven las alternativas: el texto de la línea anterior se oculta
 	# (el bocadillo no cambia de forma ni de tamaño).
 	_text_label.visible = false
-	_next_label.visible = false
 	_choices_box.visible = true
 	_catcher.visible = false
+	# La opción de salida ya está en la lista: la de la franja inferior no.
+	_salir_label.visible = false
 	set_selected_choice(clampi(selected, 0, maxi(texts.size() - 1, 0)))
 
 
@@ -151,8 +160,15 @@ func set_selected_choice(index: int) -> void:
 	for i: int in _choice_labels.size():
 		if not _choice_labels[i].visible:
 			continue
-		# Sin flechas: número + texto; la marcada se distingue por el color.
-		_choice_labels[i].text = str(i + 1) + ". " + _choice_texts[i]
+		if i == _salir_index:
+			# Opción de salida: como una alternativa más (sin enumeración),
+			# siempre en su color para no confundirla con la marcada.
+			_choice_labels[i].text = TEXTO_SALIR
+			_choice_labels[i].add_theme_color_override("font_color", COL_TEXT)
+			continue
+		# Sin enumeración: solo el texto de la alternativa; la marcada se
+		# distingue por el color (rojo) y las ya usadas en gris.
+		_choice_labels[i].text = _choice_texts[i]
 		var color := COL_TEXT
 		if i < _choice_used.size() and _choice_used[i]:
 			color = COL_USED       # opción ya usada → gris
@@ -163,8 +179,11 @@ func set_selected_choice(index: int) -> void:
 
 func hide_choices() -> void:
 	_choices_box.visible = false
+	_salir_index = -1
 	_catcher.visible = true
 	_text_label.visible = true
+	# Sin lista: la opción de salida vuelve a la franja inferior.
+	_salir_label.visible = true
 
 
 func open() -> void:
@@ -219,31 +238,15 @@ func _build_ui() -> void:
 	_text_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bg.add_child(_text_label)
 
-	# --- Botón "Continuar" (abajo a la derecha): plato oscuro con texto crema.
-	_next_plate = Panel.new()
-	_next_plate.add_theme_stylebox_override("panel", _estilo_boton())
-	_next_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_next_plate.visible = false
-	_bg.add_child(_next_plate)
-
-	_next_label = Label.new()
-	_next_label.text = "Continuar"
-	_next_label.add_theme_color_override("font_color", COL_BOTON_TEXTO)
-	_next_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_next_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_next_label.visible = false
-	_bg.add_child(_next_label)
-	# El plato sigue la visibilidad de la etiqueta (la controla esta clase).
-	_next_label.visibility_changed.connect(func() -> void:
-		_next_plate.visible = _next_label.visible)
-
 	# --- Alternativas: misma zona que el texto (el bocadillo no cambia).
+	# MAX_CHOICES reales + 1 para la opción de salida "Gracias, nos vemos"
+	# que se muestra como una alternativa más al final de la lista.
 	_choices_box = VBoxContainer.new()
 	_choices_box.add_theme_constant_override("separation", 2)
 	_choices_box.visible = false
 	_bg.add_child(_choices_box)
 
-	for i: int in MAX_CHOICES:
+	for i: int in MAX_CHOICES + 1:
 		var choice_label := Label.new()
 		choice_label.add_theme_color_override("font_color", COL_TEXT)
 		choice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -261,23 +264,24 @@ func _build_ui() -> void:
 	_catcher.gui_input.connect(_on_catcher_input)
 	add_child(_catcher)
 
-	# --- Botón "Cerrar": añadido DESPUÉS del captador, así queda encima y
-	# recibe el toque (no avanza el diálogo). Siempre visible mientras la caja
-	# esté abierta: el diálogo se puede cerrar cuando queramos.
-	_close_plate = Panel.new()
-	_close_plate.add_theme_stylebox_override("panel", _estilo_boton())
-	_close_plate.mouse_filter = Control.MOUSE_FILTER_STOP
-	_close_plate.gui_input.connect(_on_close_input)
-	add_child(_close_plate)
-
-	_close_label = Label.new()
-	_close_label.text = "Cerrar"
-	_close_label.add_theme_color_override("font_color", COL_BOTON_TEXTO)
-	_close_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_close_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# La etiqueta es decorativa: el clic lo recibe el plato de debajo.
-	_close_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_close_label)
+	# --- Opción de salida "Gracias, nos vemos" (franja inferior, abajo a la
+	# derecha): sustituye a los botones "Continuar" y "Cerrar" en las líneas
+	# sin alternativas. Se añade DESPUÉS del captador, así queda encima y
+	# recibe el toque (cerrar en vez de avanzar). Cuando hay alternativas se
+	# oculta aquí y aparece como una alternativa más al final de la lista.
+	_salir_label = Label.new()
+	_salir_label.text = TEXTO_SALIR
+	_salir_label.add_theme_color_override("font_color", COL_TEXT)
+	_salir_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_salir_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_salir_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	_salir_label.gui_input.connect(_on_salir_input)
+	# Al pasar el ratón se marca en rojo, igual que una alternativa marcada.
+	_salir_label.mouse_entered.connect(func() -> void:
+		_salir_label.add_theme_color_override("font_color", COL_SELECTED))
+	_salir_label.mouse_exited.connect(func() -> void:
+		_salir_label.add_theme_color_override("font_color", COL_TEXT))
+	add_child(_salir_label)
 
 
 ## Coloca la caja en pantalla y reescala todos sus elementos al tamaño real.
@@ -316,31 +320,17 @@ func _ajustar_layout() -> void:
 	_recolocar(_text_label, ZONA_TEXTO, e)
 	_recolocar(_choices_box, ZONA_TEXTO, e)
 
-	# Botón "Continuar": al final de la franja inferior, con tamaño según el
-	# texto (mismo ancho en todos los estados, sin flechas ni símbolos).
-	var f_pista := maxi(10, roundf(e * 10.0))
-	var ancho_btn := maxf(f_pista * 5.6, 70.0 * e)
-	var alto_btn := ZONA_PISTA.size.y * e * 1.15
-	_next_plate.position = Vector2(
-		(ZONA_PISTA.position.x + ZONA_PISTA.size.x) * e - ancho_btn,
-		ZONA_PISTA.position.y * e - (alto_btn - ZONA_PISTA.size.y * e) * 0.5
-	)
-	_next_plate.size = Vector2(ancho_btn, alto_btn)
-	_next_label.position = _next_plate.position
-	_next_label.size = _next_plate.size
-
-	# Botón "Cerrar": al inicio de la MISMA franja inferior (a la izquierda),
+	# Opción de salida de la franja inferior (líneas sin alternativas): al
+	# final de la franja, alineada a la derecha (donde estaba "Continuar"),
 	# en coordenadas de pantalla porque vive fuera del plato de la caja.
-	var ancho_cerrar := maxf(f_pista * 4.8, 64.0 * e)
-	var pos_cerrar := _bg.position + Vector2(
-		ZONA_PISTA.position.x * e,
-		ZONA_PISTA.position.y * e - (alto_btn - ZONA_PISTA.size.y * e) * 0.5
+	var f_pista := maxi(10, roundf(e * 10.0))
+	var alto_btn := ZONA_PISTA.size.y * e * 1.3
+	var ancho_salir := maxf(ZONA_PISTA.size.x * e * 0.6, 150.0 * e)
+	_salir_label.position = Vector2(
+		_bg.position.x + (ZONA_PISTA.position.x + ZONA_PISTA.size.x) * e - ancho_salir,
+		_bg.position.y + ZONA_PISTA.position.y * e - (alto_btn - ZONA_PISTA.size.y * e) * 0.5
 	)
-	_close_plate.position = pos_cerrar
-	_close_plate.size = Vector2(ancho_cerrar, alto_btn)
-	_close_label.position = pos_cerrar
-	_close_label.size = Vector2(ancho_cerrar, alto_btn)
-	_close_label.add_theme_font_size_override("font_size", f_pista)
+	_salir_label.size = Vector2(ancho_salir, alto_btn)
 
 	# Tipografía proporcional a la caja: legible en PC y en móvil.
 	var f_nombre := maxi(12, roundf(e * 15.0))
@@ -349,7 +339,7 @@ func _ajustar_layout() -> void:
 
 	_name_label.add_theme_font_size_override("font_size", f_nombre)
 	_text_label.add_theme_font_size_override("normal_font_size", f_texto)
-	_next_label.add_theme_font_size_override("font_size", f_pista)
+	_salir_label.add_theme_font_size_override("font_size", f_pista)
 
 	# Cada alternativa es una fila holgada: sirve de objetivo de toque.
 	var alto_opcion := maxf(f_opcion * 1.7, vp.y * 0.055)
@@ -370,9 +360,9 @@ func _on_catcher_input(event: InputEvent) -> void:
 		DialogueManager.advance()
 
 
-## Clic/tap sobre "Cerrar": cierra el diálogo al instante, sin esperar a que
-## terminen las líneas pendientes.
-func _on_close_input(event: InputEvent) -> void:
+## Clic/tap sobre "Gracias, nos vemos": sale del cuadro de diálogo al
+## instante, sin esperar a que terminen las líneas pendientes.
+func _on_salir_input(event: InputEvent) -> void:
 	if not visible:
 		return
 	var pressed := false
@@ -385,15 +375,21 @@ func _on_close_input(event: InputEvent) -> void:
 
 
 ## Clic/tap directo sobre una alternativa: la elige al instante (en escritorio
-## y en móvil, sin necesidad de flechas ni teclado).
+## y en móvil, sin necesidad de flechas ni teclado). Si se toca la opción de
+## salida "Gracias, nos vemos" (la que va al final de la lista), se cierra el
+## diálogo en vez de elegir una rama.
 func _on_choice_gui_input(event: InputEvent, index: int) -> void:
 	var pressed := false
 	if event is InputEventMouseButton:
 		pressed = event.pressed and event.button_index == MOUSE_BUTTON_LEFT
 	elif event is InputEventScreenTouch:
 		pressed = event.pressed
-	if pressed and index < _choice_texts.size():
+	if not pressed:
+		return
+	if index < _choice_texts.size():
 		DialogueManager.choose(index)
+	elif index == _salir_index:
+		DialogueManager.close_now()
 
 
 func _recolocar(c: Control, r: Rect2, e: float) -> void:
@@ -405,14 +401,4 @@ func _transparente() -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(0.0, 0.0, 0.0, 0.0)
 	sb.set_border_width_all(0)
-	return sb
-
-
-## Estilo del plato del botón "Continuar".
-func _estilo_boton() -> StyleBoxFlat:
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = COL_BOTON
-	sb.border_color = COL_BOTON_BORDE
-	sb.set_border_width_all(1)
-	sb.set_corner_radius_all(3)
 	return sb

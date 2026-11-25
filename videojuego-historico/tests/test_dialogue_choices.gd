@@ -53,6 +53,23 @@ func _run() -> void:
 	results.append("eligiendo=" + str(DialogueManager.state == DialogueManager.State.CHOOSING))
 	results.append("panel_en_bocadillo=" + str(box._choices_box.get_parent() == box._bg))
 	results.append("panel_visible=" + str(box._choices_box.visible))
+	# Sin enumeración: cada alternativa se muestra SOLO con su texto
+	# (sin "1.", "2.", "3." delante) y "Gracias, nos vemos" cierra la lista
+	# como una alternativa más.
+	var sin_numeros := true
+	var n_reales := dlg.lines[2].choices.size()
+	for i: int in box._choice_labels.size():
+		if not box._choice_labels[i].visible:
+			continue
+		if i < n_reales:
+			if box._choice_labels[i].text != dlg.lines[2].choices[i].text:
+				sin_numeros = false
+		elif box._choice_labels[i].text != DialogueBox.TEXTO_SALIR:
+			sin_numeros = false
+	results.append("sin_numeros=" + str(sin_numeros))
+	# La opción de salida está en la lista y la de la franja inferior se oculta.
+	results.append("salir_en_lista=" + str(box._salir_index == n_reales))
+	results.append("sin_salir_en_franja=" + str(not box._salir_label.visible))
 	# Misma forma del cuadro con o sin alternativas: el tamaño no cambia y
 	# solo se ven las opciones.
 	results.append("texto_oculto=" + str(not box._text_label.visible))
